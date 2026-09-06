@@ -5,19 +5,19 @@
   "teamId": "REEMPLAZAR_CON_ID_DEL_EQUIPO",
   "members": [
     {
-      "studentId": "REEMPLAZAR_INTEGRANTE_1",
+      "studentId": "3523110482",
       "commitShas": [
-        "REEMPLAZAR_CON_SHA_COMPLETO"
+        "5957328db4fa72bb84fedf197e88fdffdf68dd51"
       ],
       "files": [
-        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
+        "docs/risk-register.md"
       ],
-      "tests": [],
+      "tests": ["make feedback"],
       "reviews": [],
-      "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
-      "command": "REEMPLAZAR_CON_EL_COMANDO_EJECUTADO",
-      "observedResult": "REEMPLAZAR_CON_LO_QUE_OCURRIO",
-      "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
+      "prediction": "Esperaba que el proyecto original pasara typecheck, lint, test:smoke, audit:ci y bundle:release sin errores antes de tocar nada, y que el riesgo de mayor impacto en CampusOps fuera el conflicto de sincronización descrito como caso obligatorio",
+      "command": "make setup && make feedback",
+      "observedResult": "make feedback terminó en verde: 1 prueba de smoke pasó, sin errores de typecheck ni lint, audit sin vulnerabilidades críticas y el bundle de Android se exportó correctamente; luego el repositorio quedó creado y sincronizado en GitHub",
+      "explanation":  "Confirmar la línea base antes de modificar algo evita atribuir a un cambio del equipo un problema que ya existía en el proyecto original. Para riesgos, prioricé el conflicto de sincronización porque es el único caso marcado como obligatorio en docs/CAMPUSOPS.md y su impacto es el más severo: puede perder una reasignación real de coordinación, mientras que los otros dos riesgos ya tienen mitigaciones más simples"
     },
     {
       "studentId": "3522110726",
