@@ -20,7 +20,7 @@ export default function App() {
   return (
     <View style={styles.screen}>
       <View accessibilityRole="summary" style={styles.card}>
-        <Text style={styles.title}>CampusOps temporal</Text>
+        <Text style={styles.title}>CampusOps</Text>
         <Text>Incidencias del campus · entorno académico ficticio</Text>
         <Text testID="backend-status">Backend: {status}</Text>
       </View>
