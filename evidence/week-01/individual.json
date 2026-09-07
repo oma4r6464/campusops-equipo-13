@@ -1,8 +1,7 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Conserven exactamente tres integrantes y usen SHA Git completos de commits creados por cada persona.",
   "schemaVersion": 1,
   "week": 1,
-  "teamId": "REEMPLAZAR_CON_ID_DEL_EQUIPO",
+  "teamId": "13",
   "members": [
     {
       "studentId": "3523110482",
@@ -37,19 +36,22 @@
       "explanation": "La definición del problema establece un alcance claro (offline y fotos) sobre el cual el resto del equipo diseñará la falla controlada y la arquitectura del sistema."
     },
     {
-      "studentId": "REEMPLAZAR_INTEGRANTE_3",
+      "studentId": "3523110007",
       "commitShas": [
-        "REEMPLAZAR_CON_SHA_COMPLETO"
+        "749dc9f8637f47b2c072443c89005aac84c10eb6",
+        "251068af961d360007aaa5fbc0099cf92a24ccf1"
       ],
       "files": [
-        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
+        "App.tsx"
       ],
-      "tests": [],
+      "tests": [
+        "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx"
+      ],
       "reviews": [],
-      "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
-      "command": "REEMPLAZAR_CON_EL_COMANDO_EJECUTADO",
-      "observedResult": "REEMPLAZAR_CON_LO_QUE_OCURRIO",
-      "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
+      "prediction": "Esperaba que una modificación temporal del título fuera detectada por el smoke test y que restaurar el texto original recuperara el comportamiento nominal.",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
+      "observedResult": "La prueba falló con CampusOps temporal porque no encontró el texto CampusOps; después de restaurar la etiqueta, pasó con 1 suite y 1 prueba aprobadas.",
+      "explanation": "La contribución reproduce una regresión reversible en App.tsx y corrige la causa sin modificar course-tests/smoke.test.tsx. El fallo aisló el contrato visible de la pantalla y la segunda ejecución confirmó la corrección."
     }
   ]
 }

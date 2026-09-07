@@ -1,23 +1,22 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Los demás campos deben contener evidencia real y commitSha debe ser un SHA Git completo de 40 caracteres.",
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "REEMPLAZAR_CON_SHA_DEL_COMMIT_DE_CODIGO_Y_DOCUMENTOS",
-  "generatedAt": "REEMPLAZAR_CON_FECHA_HORA_ISO_8601",
+  "commitSha": "251068af961d360007aaa5fbc0099cf92a24ccf1",
+  "generatedAt": "2026-09-06T19:36:23-06:00",
   "checks": [
     {
       "id": "falla-controlada",
       "status": "fail",
       "scenarioType": "failure",
-      "command": "npm run test:smoke",
-      "evidence": "REEMPLAZAR_CON_SINTOMA_OBSERVADO_Y_CAUSA_IDENTIFICADA"
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
+      "evidence": "Fallo reproducido: Jest no encontró el texto CampusOps porque App.tsx renderizaba CampusOps temporal. La causa fue el cambio temporal de la etiqueta del título en App.tsx; el estado del backend continuó como available."
     },
     {
       "id": "correccion-verificada",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm run test:smoke",
-      "evidence": "REEMPLAZAR_CON_RESULTADO_OBSERVABLE_DESPUES_DE_CORREGIR"
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
+      "evidence": "Después de restaurar la etiqueta CampusOps en App.tsx, Jest terminó con 1 suite aprobada y 1 prueba aprobada, sin modificar course-tests/smoke.test.tsx."
     }
   ]
 }

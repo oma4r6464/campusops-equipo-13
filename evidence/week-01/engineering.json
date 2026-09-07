@@ -1,20 +1,19 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Comparen alternativas reales y relacionen la decisión con una comprobación ejecutada.",
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "REEMPLAZAR_CON_SHA_DEL_COMMIT_DE_CODIGO_Y_DOCUMENTOS",
-  "decision": "REEMPLAZAR_CON_LA_DECISION_DE_ALCANCE_RIESGO_O_ACEPTACION",
+  "commitSha": "251068af961d360007aaa5fbc0099cf92a24ccf1",
+  "decision": "Mantener el texto visible CampusOps como contrato estable de la pantalla y comprobarlo con el smoke test existente, porque una regresión mínima de presentación ya impide identificar correctamente la aplicación.",
   "alternatives": [
-    "REEMPLAZAR_CON_PRIMERA_ALTERNATIVA_REAL",
-    "REEMPLAZAR_CON_SEGUNDA_ALTERNATIVA_REAL"
+    "Cambiar el texto visible y actualizar la prueba para aceptar la nueva etiqueta.",
+    "Eliminar la aserción del título y verificar únicamente el estado del backend."
   ],
-  "tradeoff": "REEMPLAZAR_CON_EL_BENEFICIO_Y_EL_COSTO_DE_LA_DECISION",
+  "tradeoff": "Conservar el contrato existente mantiene una comprobación simple y evita ocultar regresiones de interfaz, pero limita cambios futuros de copy hasta actualizar conscientemente el contrato y su evidencia.",
   "requirementIds": ["AC-02", "AC-04"],
   "verification": [
     {
-      "command": "REEMPLAZAR_CON_COMANDO_EJECUTADO",
-      "result": "REEMPLAZAR_CON_RESULTADO_OBSERVADO",
-      "evidence": "REEMPLAZAR_CON_ARCHIVO_REPORTE_O_SALIDA_QUE_LO_DEMUESTRA"
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
+      "result": "La ejecución falló con la etiqueta temporal y después pasó con 1 suite y 1 prueba aprobadas al restaurar CampusOps.",
+      "evidence": "App.tsx, commits 749dc9f8637f47b2c072443c89005aac84c10eb6 y 251068af961d360007aaa5fbc0099cf92a24ccf1, y salida de Jest registrada en baseline.json."
     }
   ]
 }
