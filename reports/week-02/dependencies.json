@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "commitSha": "6ed382b28859046176409a47e6ded3d100d79154",
+  "generatedAt": "2026-09-12T04:04:54.230Z",
+  "checks": [
+    {
+      "id": "architecture_imports_final",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm run architecture:check",
+      "evidence": "El script reviso src y reporto status pass con violations: []."
+    },
+    {
+      "id": "ui_to_infrastructure_contradiction",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "npm run architecture:check con import temporal desde src/ui/CampusOpsScreen.tsx hacia src/infrastructure/incidents/inMemoryIncidentRepository",
+      "evidence": "La salida real fue status fail y la violacion ui-no-infrastructure: src/ui/CampusOpsScreen.tsx imports src/infrastructure/incidents/inMemoryIncidentRepository.ts."
+    },
+    {
+      "id": "ui_to_infrastructure_contradiction",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm run architecture:check despues de retirar el import temporal",
+      "evidence": "La salida real volvio a status pass; la UI queda conectada a CampusOpsServices y no importa infraestructura."
+    },
+    {
+      "id": "week_02_public_test",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-02.test.ts",
+      "evidence": "La prueba publica valida que ADR y diagrama contengan ui, application, domain e infrastructure y que no exista una arista UI -> infrastructure."
+    },
+    {
+      "id": "incident_list_detail",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-02-ui.test.tsx",
+      "evidence": "La prueba propia renderiza CampusOps, muestra la lista de incidencias ficticias y abre el detalle de Zona con baja conectividad."
+    }
+  ]
+}
