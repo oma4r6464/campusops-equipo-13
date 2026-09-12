@@ -7,13 +7,15 @@
       "studentId": "3523110007",
       "commitShas": [
         "14e564668e3aead99672214e2b8e325110a32252",
-        "6ed382b28859046176409a47e6ded3d100d79154"
+        "6ed382b28859046176409a47e6ded3d100d79154",
+        "2883305d86cdc8069e6d3884f28bebc198c0ea30"
       ],
       "files": [
         "App.tsx",
         "src/ui/CampusOpsScreen.tsx",
         "src/application/campusOpsServices.ts",
-        "tools/check_architecture_imports.mjs"
+        "tools/check_architecture_imports.mjs",
+        ".github/workflows/week-01-feedback.yml"
       ],
       "tests": [
         "npm run architecture:check",
@@ -25,7 +27,7 @@
       "prediction": "La UI puede cambiar la fuente de incidencias si se conserva el contrato CampusOpsServices.",
       "command": "npm run architecture:check",
       "observedResult": "status pass con violations: [] en el estado final.",
-      "explanation": "Se separo la composicion de proveedores en App.tsx y la pantalla quedo consumiendo casos de uso en lugar de imports directos a infraestructura."
+      "explanation": "Se separo la composicion de proveedores en App.tsx, la pantalla quedo consumiendo casos de uso y se acoto el workflow viejo para no validar Semana 01 sobre commits posteriores."
     },
     {
       "studentId": "3523110482",
