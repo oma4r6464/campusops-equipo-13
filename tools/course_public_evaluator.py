@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -23,6 +25,15 @@ SECRET_PATTERNS = {
 
 
 def run(repo: Path, command: list[str], timeout: int = 300) -> tuple[bool, str]:
+    executable = command[0]
+    if os.name == "nt" and executable == "npm":
+        npm_cmd = shutil.which("npm.cmd")
+        if npm_cmd is not None:
+            command = [npm_cmd, *command[1:]]
+    elif os.name == "nt" and shutil.which(executable) is None:
+        windows_executable = shutil.which(f"{executable}.cmd")
+        if windows_executable is not None:
+            command = [windows_executable, *command[1:]]
     try:
         result = subprocess.run(command, cwd=repo, text=True, capture_output=True, timeout=timeout)
     except (OSError, subprocess.TimeoutExpired) as exc:

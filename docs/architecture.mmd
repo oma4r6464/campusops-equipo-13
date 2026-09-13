@@ -1,0 +1,58 @@
+flowchart TD
+  subgraph Profiles["Perfiles de usuario"]
+    Reporter["Reportante"]
+    Technician["Tecnico"]
+    Coordinator["Coordinador"]
+  end
+
+  subgraph Composition["composition root"]
+    AppRoot["App.tsx\nraiz de composicion"]
+  end
+
+  subgraph UI["ui"]
+    CampusOpsScreen["CampusOpsScreen\nlista y detalle"]
+  end
+
+  subgraph Application["application"]
+    CampusOpsServices["CampusOpsServices"]
+    IncidentUseCases["IncidentUseCases\nlistIncidents / getIncidentDetail"]
+    BackendStatusUseCase["BackendStatusUseCase"]
+  end
+
+  subgraph Domain["domain"]
+    IncidentModel["Incident\nestado, prioridad, perfil"]
+    IncidentRepository["IncidentRepository port"]
+    SessionBoundary["SessionBoundary port\nsesion prevista"]
+    PersistenceBoundary["PersistenceBoundary port\npersistencia prevista"]
+    LocationBoundary["LocationProviderBoundary port\nubicacion prevista"]
+  end
+
+  subgraph Infrastructure["infrastructure"]
+    InMemoryRepository["InMemoryIncidentRepository\nfake determinista"]
+    BackendHealthReader["CourseBackendHealthReader"]
+    CourseBackend["src/api/courseBackend\ntransporte existente"]
+    FutureProviders["Futuros proveedores\nstorage / geocoding / maps"]
+  end
+
+  Reporter --> CampusOpsScreen
+  Technician --> CampusOpsScreen
+  Coordinator --> CampusOpsScreen
+
+  AppRoot --> CampusOpsServices
+  AppRoot --> InMemoryRepository
+  AppRoot --> BackendHealthReader
+  CampusOpsScreen --> CampusOpsServices
+  CampusOpsServices --> IncidentUseCases
+  CampusOpsServices --> BackendStatusUseCase
+  IncidentUseCases --> IncidentRepository
+  IncidentUseCases --> IncidentModel
+  InMemoryRepository -.implements.-> IncidentRepository
+  BackendHealthReader --> CourseBackend
+  FutureProviders -.implements.-> PersistenceBoundary
+  FutureProviders -.implements.-> LocationBoundary
+  FutureProviders -.implements.-> SessionBoundary
+
+  classDef boundary fill:#eef6ff,stroke:#2563eb,stroke-width:1px,color:#0f172a;
+  classDef infra fill:#ecfdf5,stroke:#0f766e,stroke-width:1px,color:#0f172a;
+  class Composition,UI,Application,Domain boundary;
+  class Infrastructure infra;

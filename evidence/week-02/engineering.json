@@ -1,23 +1,36 @@
 {
   "schemaVersion": 1,
   "week": 2,
-  "commitSha": "94e416a67cc9e74a0aff7b46155bcb71cbfbd657",
-  "decision": "Adoptar una arquitectura basada en capas (Dominio, Aplicación, UI, Infraestructura) aislando la lógica de negocio usando Inyección de Dependencias.",
+  "commitSha": "2883305d86cdc8069e6d3884f28bebc198c0ea30",
+  "decision": "El equipo eligio separar CampusOps en capas ui, application, domain e infrastructure, usando App.tsx como raiz de composicion. La UI consume CampusOpsServices y la infraestructura implementa puertos como IncidentRepository con datos ficticios deterministas para esta semana.",
   "alternatives": [
-    "Mantener un patrón MVC o arquitectura acoplada donde la UI llame directamente a las APIs o base de datos.",
-    "Adoptar Redux de manera global acoplando el estado con la persistencia."
+    "Pantallas conectadas directamente a servicios o datos fake: menor esfuerzo inicial, pero mezcla presentacion, proveedor y reglas, dificulta pruebas y hace costoso cambiar transporte o almacenamiento.",
+    "Capas con puertos e implementaciones sustituibles: requiere mas archivos y composicion explicita, pero permite probar casos de uso sin React Native y reemplazar fake, backend, persistencia o ubicacion por adaptadores.",
+    "Arquitectura por modulos de feature completos: agrupa todo por incidencias, sesion o ubicacion, pero para Semana 02 aumenta el riesgo de que UI e infraestructura queden mezcladas dentro del mismo modulo."
   ],
-  "tradeoff": "La arquitectura elegida implica crear más archivos e interfaces iniciales (boilerplate), pero garantiza alta facilidad de prueba (testability) y flexibilidad para cambiar de proveedor en el futuro sin reescribir la UI.",
+  "tradeoff": "La decision aumenta la complejidad inicial para un flujo pequeno, pero mejora la facilidad de prueba y baja el costo de cambio de proveedor. Ese costo se justifica porque CampusOps crecera hacia sesion, persistencia offline, sincronizacion y ubicacion.",
   "requirementIds": [
     "AC-01",
     "AC-02",
-    "AC-03"
+    "AC-03",
+    "AC-04",
+    "AC-05"
   ],
   "verification": [
     {
-      "command": "npx tsc --noEmit && make verify",
-      "result": "La comprobación de tipos y los tests de arquitectura (dependencias) pasan correctamente. Existe coherencia entre el diagrama .mmd y el código.",
-      "evidence": "Reporte en dependencies.json y archivos ubicados en src/core/ demostrando límites estrictos."
+      "command": "npm run architecture:check",
+      "result": "pass",
+      "evidence": "El checker reporto violations: [] para el estado final."
+    },
+    {
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx course-tests/week-02-ui.test.tsx course-tests/public/week-02.test.ts",
+      "result": "pass",
+      "evidence": "Tres suites pasaron: smoke, lista/detalle y prueba publica de arquitectura."
+    },
+    {
+      "command": "npm run architecture:check con import temporal UI -> infrastructure",
+      "result": "fail controlado",
+      "evidence": "El checker detecto ui-no-infrastructure y se corrigio retirando el import directo."
     }
   ]
 }
