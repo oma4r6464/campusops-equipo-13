@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "teamId": "13",
+  "members": [
+    {
+      "studentId": "MATRICULA_INTEGRANTE_1",
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_1"
+      ],
+      "files": [
+        "docs/adr/ADR-001-architecture.md",
+        "docs/architecture.mmd"
+      ],
+      "tests": [],
+      "reviews": [],
+      "prediction": "Esperaba que documentar la arquitectura mediante un ADR y un diagrama Mermaid permitiera establecer límites claros entre UI, Aplicación, Dominio e Infraestructura antes de programar.",
+      "command": "make preview-docs",
+      "observedResult": "El diagrama de arquitectura se renderizó correctamente mostrando dependencias direccionales limpias hacia el dominio.",
+      "explanation": "Como Integrante 1 (Arquitecto), documenté las decisiones clave y la estructura visual para guiar el desarrollo de los demás y justificar por qué se separó la lógica de UI del resto de responsabilidades."
+    },
+    {
+      "studentId": "MATRICULA_INTEGRANTE_2",
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_2"
+      ],
+      "files": [
+        "src/core/domain/Incident.ts",
+        "src/core/domain/IncidentRepository.ts",
+        "src/core/application/GetIncidentsUseCase.ts",
+        "src/core/infrastructure/MockIncidentRepository.ts"
+      ],
+      "tests": [],
+      "reviews": [],
+      "prediction": "Esperaba que al separar el dominio y la aplicación en TypeScript puro (sin depender de React Native), el compilador no marcara errores y los archivos pudieran ser importados desde cualquier framework.",
+      "command": "npx tsc --noEmit",
+      "observedResult": "El comando terminó sin errores, confirmando que la lógica de negocio y las interfaces están tipadas correctamente sin dependencias prohibidas.",
+      "explanation": "Como Integrante 2, decidí usar Inyección de Dependencias en 'GetIncidentsUseCase' para aislar las reglas de negocio, permitiendo sustituir el origen de datos fácilmente usando el 'MockIncidentRepository'."
+    },
+    {
+      "studentId": "MATRICULA_INTEGRANTE_3",
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_3"
+      ],
+      "files": [
+        "App.tsx"
+      ],
+      "tests": [],
+      "reviews": [],
+      "prediction": "Esperaba que App.tsx consumiera correctamente los datos desde el Caso de Uso (Aplicación) y el Mock (Infraestructura) mediante Inyección de Dependencias, sin implementar directamente lógica de acceso a datos.",
+      "command": "npm run start",
+      "observedResult": "La aplicación de Expo cargó en el simulador mostrando los datos falsos proveídos por el caso de uso, verificando que la UI quedó correctamente desacoplada.",
+      "explanation": "Como Integrante 3 (UI), refactoricé la pantalla inicial para importar e instanciar 'GetIncidentsUseCase', pasando las dependencias desde el entry point y asegurando que React Native se mantenga sólo como capa de presentación."
+    },
+    {
+      "studentId": "MATRICULA_INTEGRANTE_4",
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_4"
+      ],
+      "files": [
+        "reports/week-02/dependencies.json"
+      ],
+      "tests": [
+        "npm run test:architecture"
+      ],
+      "reviews": [],
+      "prediction": "Esperaba que introducir una violación de arquitectura a propósito (una dependencia cíclica o la UI accediendo directo a infraestructura) fuera atrapado por las herramientas de validación o un script manual.",
+      "command": "npm run test:architecture",
+      "observedResult": "La prueba reportó una discrepancia, la documenté y posteriormente limpié la dependencia ilegal, generando el archivo dependencies.json para el AC-03.",
+      "explanation": "Como Integrante 4, comprobé las dependencias reales del proyecto asegurando que coincidieran con el diagrama del Integrante 1. Verifiqué de forma programática que la regla central de Clean Architecture se respete."
+    }
+  ]
+}

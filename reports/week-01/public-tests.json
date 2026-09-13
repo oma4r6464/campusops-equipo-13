@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "mode": "evidence",
+  "mode": "public",
   "commitSha": "af0d9b43a261f089b42d8e4082afcae9ecb3f3cb",
-  "evaluatedAt": "2026-09-07T05:44:52.255281+00:00",
+  "evaluatedAt": "2026-09-07T05:41:37.786864+00:00",
   "status": "pass",
   "checks": [
     {
@@ -50,11 +50,6 @@
       "id": "schema:evidence/week-01/individual.json",
       "status": "pass",
       "detail": "three individual evidence records found"
-    },
-    {
-      "id": "frozen_sha",
-      "status": "pass",
-      "detail": "tag=week-01-final tagSha=af0d9b43a261f089b42d8e4082afcae9ecb3f3cb head=af0d9b43a261f089b42d8e4082afcae9ecb3f3cb"
     }
   ]
 }
