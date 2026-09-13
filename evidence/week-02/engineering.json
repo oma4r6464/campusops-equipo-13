@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 2,
-  "commitSha": "REEMPLAZAR_CON_SHA_FINAL_DE_ENTREGA",
+  "commitSha": "94e416a67cc9e74a0aff7b46155bcb71cbfbd657",
   "decision": "Adoptar una arquitectura basada en capas (Dominio, Aplicación, UI, Infraestructura) aislando la lógica de negocio usando Inyección de Dependencias.",
   "alternatives": [
     "Mantener un patrón MVC o arquitectura acoplada donde la UI llame directamente a las APIs o base de datos.",
