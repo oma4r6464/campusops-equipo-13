@@ -60,7 +60,9 @@
         "src/core/application/GetIncidentsUseCase.ts",
         "src/core/infrastructure/MockIncidentRepository.ts"
       ],
-      "tests": [],
+      "tests": [
+        "npx tsc --noEmit"
+      ],
       "reviews": [],
       "prediction": "Esperaba que al separar el dominio y la aplicación en TypeScript puro (sin depender de React Native), el compilador no marcara errores y los archivos pudieran ser importados desde cualquier framework.",
       "command": "npx tsc --noEmit",
