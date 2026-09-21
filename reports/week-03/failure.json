@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "mode": "evidence",
+  "commitSha": "398f92e79164f72b5a9cd50fcb9aa320b1e4ceea",
+  "evaluatedAt": "2026-09-21T23:11:44.521362+00:00",
+  "status": "fail",
+  "checks": [
+    {
+      "id": "base_files",
+      "status": "pass",
+      "detail": "missing=[]"
+    },
+    {
+      "id": "react_native_profile",
+      "status": "pass",
+      "detail": "missing packages=[]"
+    },
+    {
+      "id": "toolchain_scripts",
+      "status": "pass",
+      "detail": "missing scripts=[]"
+    },
+    {
+      "id": "workflow_integrity",
+      "status": "pass",
+      "detail": "bypass markers=[]"
+    },
+    {
+      "id": "secret_scan",
+      "status": "pass",
+      "detail": "hits=[]"
+    },
+    {
+      "id": "required_evidence",
+      "status": "pass",
+      "detail": "missing/empty=[]"
+    },
+    {
+      "id": "schema:reports/week-03/security.json",
+      "status": "fail",
+      "detail": "commitSha must be HEAD or its direct evidence-only parent"
+    },
+    {
+      "id": "schema:evidence/week-03/engineering.json",
+      "status": "fail",
+      "detail": "commitSha must be HEAD or its direct evidence-only parent"
+    },
+    {
+      "id": "schema:evidence/week-03/individual.json",
+      "status": "pass",
+      "detail": "three individual evidence records found"
+    },
+    {
+      "id": "frozen_sha",
+      "status": "fail",
+      "detail": "tag=week-03-final tagSha=d3fd5f231c4c609f9325417d353c2d7d71e044da head=398f92e79164f72b5a9cd50fcb9aa320b1e4ceea"
+    }
+  ]
+}
