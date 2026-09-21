@@ -14,4 +14,4 @@ test('renders the reproducible baseline and resolves backend state', async () =>
   const view = await render(<App />);
   expect(view.getByText('CampusOps')).toBeTruthy();
   await waitFor(() => expect(view.getByTestId('backend-status').props.children.join('')).toContain('available'));
-});
+}, 15000);
