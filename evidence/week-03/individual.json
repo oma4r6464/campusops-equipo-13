@@ -6,7 +6,7 @@
     {
       "studentId": "sixto",
       "commitShas": [
-        "PENDING_SHA_____________________________"
+        "a7b92042e35e552b6cf9a3d51e685f702dfc4f47"
       ],
       "files": [
         "docs/threat-model.md"
@@ -40,7 +40,7 @@
     {
       "studentId": "integrante-3",
       "commitShas": [
-        "PENDING_SHA_____________________________"
+        "a7b92042e35e552b6cf9a3d51e685f702dfc4f47"
       ],
       "files": [
         "evidence/week-03/engineering.json"
@@ -57,7 +57,7 @@
     {
       "studentId": "omar",
       "commitShas": [
-        "PENDING_SHA_____________________________"
+        "a7b92042e35e552b6cf9a3d51e685f702dfc4f47"
       ],
       "files": [
         "reports/week-03/security.json"

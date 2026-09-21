@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "week": 3,
   "mode": "verify",
-  "commitSha": "95a7f0d76cc486be3d776444a8709e8a3d2d55b1",
-  "evaluatedAt": "2026-09-21T00:06:58.824617+00:00",
-  "status": "fail",
+  "commitSha": "8b4051a5102f661030713758e1a15e1953328fce",
+  "evaluatedAt": "2026-09-21T23:07:52.216126+00:00",
+  "status": "pass",
   "checks": [
     {
       "id": "base_files",
@@ -28,8 +28,8 @@
     },
     {
       "id": "secret_scan",
-      "status": "fail",
-      "detail": "hits=['reports\\\\week-03\\\\security.json:public_secret_name']"
+      "status": "pass",
+      "detail": "hits=[]"
     },
     {
       "id": "toolchain_1",
@@ -48,8 +48,8 @@
     },
     {
       "id": "toolchain_4",
-      "status": "fail",
-      "detail": "npm run test:smoke\n\u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m 14 |\u001b[39m   \u001b[36mconst\u001b[39m view \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m render(\u001b[33m<\u001b[39m\u001b[33mApp\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m   expect(view\u001b[33m.\u001b[39mgetByText(\u001b[32m'CampusOps'\u001b[39m))\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 16 |\u001b[39m   \u001b[36mawait\u001b[39m waitFor(() \u001b[33m=>\u001b[39m expect(view\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'backend-status'\u001b[39m)\u001b[33m.\u001b[39mprops\u001b[33m.\u001b[39mchildren\u001b[33m.\u001b[39mjoin(\u001b[32m''\u001b[39m))\u001b[33m.\u001b[39mtoContain(\u001b[32m'available'\u001b[39m))\u001b[33m;\u001b[39m\n     \u001b[90m 17 |\u001b[39m })\u001b[33m;\u001b[39m\n     \u001b[90m 18 |\u001b[39m\u001b[0m\n\n      at Object.require [as StyleSheet] (node_modules/react-native/index.js:351:12)\n      at StyleSheet (node_modules/@testing-library/react-native/src/helpers/accessibility.ts:74:21)\n      at isSubtreeInaccessible (node_modules/@testing-library/react-native/src/helpers/accessibility.ts:38:38)\n      at node_modules/@testing-library/react-native/src/helpers/find-all.ts:33:65\n          at Array.filter (<anonymous>)\n      at filter (node_modules/@testing-library/react-native/src/helpers/find-all.ts:33:18)\n      at queryAllByTextFn (node_modules/@testing-library/react-native/src/queries/text.ts:22:19)\n      at Object.getFn [as getByText] (node_modules/@testing-library/react-native/src/queries/make-queries.ts:154:48)\n      at Object.getByText (course-tests/smoke.test.tsx:15:15)\n      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)\n      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)\nFAIL course-tests/smoke.test.tsx (69.738 s)\n  × renders the reproducible baseline and resolves backend state (18834 ms)\n\n  ● renders the reproducible baseline and resolves backend state\n\n    thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n\n    \u001b[0m \u001b[90m 11 |\u001b[39m }))\u001b[33m;\u001b[39m\n     \u001b[90m 12 |\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 13 |\u001b[39m test(\u001b[32m'renders the reproducible baseline and resolves backend state'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 14 |\u001b[39m   \u001b[36mconst\u001b[39m view \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m render(\u001b[33m<\u001b[39m\u001b[33mApp\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m 15 |\u001b[39m   expect(view\u001b[33m.\u001b[39mgetByText(\u001b[32m'CampusOps'\u001b[39m))\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n     \u001b[90m 16 |\u001b[39m   \u001b[36mawait\u001b[39m waitFor(() \u001b[33m=>\u001b[39m expect(view\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'backend-status'\u001b[39m)\u001b[33m.\u001b[39mprops\u001b[33m.\u001b[39mchildren\u001b[33m.\u001b[39mjoin(\u001b[32m''\u001b[39m))\u001b[33m.\u001b[39mtoContain(\u001b[32m'available'\u001b[39m))\u001b[33m;\u001b[39m\u001b[0m\n\n      at Object.test (course-tests/smoke.test.tsx:13:1)\n\nTest Suites: 1 failed, 1 total\nTests:       1 failed, 1 total\nSnapshots:   0 total\nTime:        79.779 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
+      "status": "pass",
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (733 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        3.001 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
     }
   ]
 }

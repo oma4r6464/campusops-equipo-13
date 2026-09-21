@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "commitSha": "748e86532df5834eac17b5b73fceede8bda1b3cc",
-  "generatedAt": "2026-09-20T23:59:00Z",
+  "commitSha": "8b4051a5102f661030713758e1a15e1953328fce",
+  "generatedAt": "2026-09-21T21:00:00Z",
   "checks": [
     {
       "id": "ac-03-mandatory-failure",
       "status": "pass",
       "scenarioType": "failure",
       "command": "make verify-week-03",
-      "evidence": "Se introdujo un secreto (EXPO_PUBLIC_SECRET=123) y el CI falló en secret_scan. Luego se removió el secreto y el CI pasó correctamente."
+      "evidence": "Se introdujo un secreto intencionalmente (simulando una credencial expuesta) y el CI falló en secret_scan. Luego se removió el secreto y el CI pasó correctamente."
     }
   ]
 }
