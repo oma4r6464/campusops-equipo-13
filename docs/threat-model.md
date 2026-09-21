@@ -43,3 +43,11 @@ Se identificaron las siguientes amenazas utilizando datos ficticios como base pa
 - **Control que lo reduce:** Reglas de linter (ESLint) estáticas que impidan el uso irrestricto de `console.log`, y funciones de sanitización de logs.
 - **Prueba asociada:** El paso de _Linting_ (`npm run lint`) en el CI marcará un error y romperá la compilación si detecta declaraciones de consola no permitidas.
 - **Riesgo residual:** Que otros servicios de terceros (Analytics, Crashlytics) capturen estados de la app inadvertidamente.
+
+## 4. Verificación
+
+La verificación de estos controles se ejecuta mediante el workflow de Semana 03 y
+los comandos `make verify-week-03` y `make public-test-week-03`. El escaneo de
+secretos debe detectar un valor ficticio introducido de forma controlada y, después
+de retirarlo, finalizar sin hallazgos. El resultado observable se conserva en
+`reports/week-03/security.json`.

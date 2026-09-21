@@ -49,3 +49,23 @@ Sustituye `01` por la semana efectiva correspondiente. No edites tests o workflo
 - No subas `.env`, tokens, credenciales, datos personales reales ni archivos de firma.
 - El backend incluido es sintético y no contiene credenciales.
 - Todo valor `EXPO_PUBLIC_*` queda expuesto al cliente y jamás debe contener secretos.
+
+## PWA y funcionamiento sin conexión
+
+La exportación web usa `public/sw.js`. En el navegador, `index.ts` registra el worker
+únicamente cuando el entorno ofrece `serviceWorker`; Android e iOS continúan usando
+el arranque normal de Expo.
+
+```bash
+npm run typecheck
+npm test -- --runInBand tests/service-worker.spec.ts tests/offline.spec.ts
+make verify-week-03
+make public-test-week-03
+```
+
+El worker precarga el shell disponible, sirve recursos estáticos desde caché, intenta
+primero la red para navegaciones y conserva respuestas dinámicas válidas. Si la red
+falla, devuelve la navegación cacheada o `offline.html`. La estrategia y sus límites
+están documentados en [docs/cache-strategy.md](docs/cache-strategy.md); la evidencia
+de la Semana 03 se conserva en `reports/week-03/security.json` y
+`evidence/week-03/`.
