@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "mode": "verify",
+  "mode": "public",
   "commitSha": "ca5b0c330164255c8423e9351555e08534587be5",
-  "evaluatedAt": "2026-09-21T03:56:07.878447+00:00",
+  "evaluatedAt": "2026-09-21T03:56:19.417606+00:00",
   "status": "pass",
   "checks": [
     {
@@ -32,6 +32,26 @@
       "detail": "hits=[]"
     },
     {
+      "id": "required_evidence",
+      "status": "pass",
+      "detail": "missing/empty=[]"
+    },
+    {
+      "id": "schema:reports/week-03/security.json",
+      "status": "pass",
+      "detail": "1 checks indexed, 1 boundary/failure; report evaluates HEAD"
+    },
+    {
+      "id": "schema:evidence/week-03/engineering.json",
+      "status": "pass",
+      "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
+    },
+    {
+      "id": "schema:evidence/week-03/individual.json",
+      "status": "pass",
+      "detail": "three individual evidence records found"
+    },
+    {
       "id": "toolchain_1",
       "status": "pass",
       "detail": "npm run typecheck\n> dmi-react-native-starter@1.0.0 typecheck\n> tsc --noEmit"
@@ -49,7 +69,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx\n  âˆš renders the reproducible baseline and resolves backend state (469 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.635 s, estimated 2 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-03.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-03.test.ts\n\n\nPASS temp_week3/course-tests/public/week-03.test.ts\nPASS course-tests/public/week-03.test.ts\n\nTest Suites: 2 passed, 2 total\nTests:       4 passed, 4 total\nSnapshots:   0 total\nTime:        1.043 s\nRan all test suites matching /course-tests\\\\public\\\\week-03.test.ts/i."
     }
   ]
 }
