@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "commitSha": "95a7f0d76cc486be3d776444a8709e8a3d2d55b1",
+  "decision": "Se prioriza la amenaza de exposición de credenciales (Prioridad 1) implementando escaneo automático de secretos. Esto atiende el riesgo más crítico que podría comprometer todo el backend evadiendo controles locales.",
+  "alternatives": [
+    "Priorizar la alteración de asignaciones usando controles de backend.",
+    "Priorizar la filtración de datos en logs usando linters.",
+    "Priorizar el escaneo de secretos antes del despliegue en la plataforma de integración continua."
+  ],
+  "tradeoff": "Implementar el escaneo de secretos en CI añade tiempo y dependencia de herramientas externas al flujo de trabajo, pero mitiga el riesgo de pérdida total de credenciales, lo cual es inaceptable.",
+  "requirementIds": [
+    "AC-04"
+  ],
+  "verification": [
+    {
+      "command": "make verify-week-03",
+      "result": "pass",
+      "evidence": "El script de evaluación ejecuta scan_secrets que busca patrones como github_token o EXPO_PUBLIC_SECRET."
+    }
+  ]
+}

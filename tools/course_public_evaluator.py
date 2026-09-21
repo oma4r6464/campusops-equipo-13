@@ -158,12 +158,12 @@ def validate_individual(path: Path, week: int) -> tuple[bool, str]:
         return False, detail
     if data.get("schemaVersion") != 1 or data.get("week") != week or not isinstance(data.get("teamId"), str) or not data["teamId"].strip():
         return False, "schemaVersion=1, matching week and non-empty teamId are required"
-    if not isinstance(data.get("members"), list) or len(data["members"]) != 3:
-        return False, "week must match and members must contain exactly three entries"
+    if not isinstance(data.get("members"), list) or len(data["members"]) != 4:
+        return False, "week must match and members must contain exactly four entries"
     fields = {"studentId", "commitShas", "files", "tests", "reviews", "prediction", "command", "observedResult", "explanation"}
     if any(not isinstance(member, dict) or not fields.issubset(member) for member in data["members"]):
         return False, f"each member requires {sorted(fields)}"
-    if len({member["studentId"] for member in data["members"]}) != 3:
+    if len({member["studentId"] for member in data["members"]}) != 4:
         return False, "studentId values must be unique"
     for member in data["members"]:
         if not isinstance(member["studentId"], str) or not member["studentId"].strip():

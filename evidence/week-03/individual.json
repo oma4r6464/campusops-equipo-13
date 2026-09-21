@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "sixto",
+      "commitShas": [
+        "PENDING_SHA_____________________________"
+      ],
+      "files": [
+        "docs/threat-model.md"
+      ],
+      "tests": [
+        "course-tests/smoke.test.tsx"
+      ],
+      "reviews": [],
+      "prediction": "El modelo de amenazas identificará correctamente 4 riesgos clave.",
+      "command": "cat docs/threat-model.md",
+      "observedResult": "Contiene los riesgos priorizados.",
+      "explanation": "Se describió el riesgo de filtración de credenciales."
+    },
+    {
+      "studentId": "3522110726",
+      "commitShas": [
+        "95a7f0d76cc486be3d776444a8709e8a3d2d55b1"
+      ],
+      "files": [
+        ".github/workflows/week-03-ci-amenazas-feedback.yml"
+      ],
+      "tests": [],
+      "reviews": [
+        "docs/threat-model.md"
+      ],
+      "prediction": "El workflow de GitHub Actions ejecutará make verify-week-03 exitosamente.",
+      "command": "make setup",
+      "observedResult": "Dependencias instaladas correctamente.",
+      "explanation": "Se revisó que el CI cumpla los pasos obligatorios."
+    },
+    {
+      "studentId": "integrante-3",
+      "commitShas": [
+        "PENDING_SHA_____________________________"
+      ],
+      "files": [
+        "evidence/week-03/engineering.json"
+      ],
+      "tests": [],
+      "reviews": [
+        "docs/threat-model.md"
+      ],
+      "prediction": "La evidencia de ingeniería pasará la validación del evaluador.",
+      "command": "make verify-week-03",
+      "observedResult": "Validación exitosa de schemas JSON.",
+      "explanation": "Se justificó la elección de la amenaza de prioridad 1."
+    },
+    {
+      "studentId": "omar",
+      "commitShas": [
+        "PENDING_SHA_____________________________"
+      ],
+      "files": [
+        "reports/week-03/security.json"
+      ],
+      "tests": [],
+      "reviews": [
+        ".github/workflows/week-03-ci-amenazas-feedback.yml"
+      ],
+      "prediction": "El reporte de seguridad registrará el caso de fallo inducido en CI.",
+      "command": "cat reports/week-03/security.json",
+      "observedResult": "Archivo security.json contiene el chequeo de secretos fallido y corregido.",
+      "explanation": "Se redactó la evidencia del chequeo de secretos en la integración continua."
+    }
+  ]
+}

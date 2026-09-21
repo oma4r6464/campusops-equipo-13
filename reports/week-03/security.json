@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "commitSha": "95a7f0d76cc486be3d776444a8709e8a3d2d55b1",
+  "generatedAt": "2026-09-20T23:59:00Z",
+  "checks": [
+    {
+      "id": "ac-03-mandatory-failure",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "make verify-week-03",
+      "evidence": "Se introdujo un secreto (EXPO_PUBLIC_SECRET=123) y el CI falló en secret_scan. Luego se removió el secreto y el CI pasó correctamente."
+    }
+  ]
+}
