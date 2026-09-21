@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "commitSha": "95a7f0d76cc486be3d776444a8709e8a3d2d55b1",
+  "commitSha": "748e86532df5834eac17b5b73fceede8bda1b3cc",
   "decision": "Se prioriza la amenaza de exposición de credenciales (Prioridad 1) implementando escaneo automático de secretos. Esto atiende el riesgo más crítico que podría comprometer todo el backend evadiendo controles locales.",
   "alternatives": [
     "Priorizar la alteración de asignaciones usando controles de backend.",
