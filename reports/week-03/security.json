@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "commitSha": "ca5b0c330164255c8423e9351555e08534587be5",
+  "commitSha": "748e86532df5834eac17b5b73fceede8bda1b3cc",
   "generatedAt": "2026-09-20T23:59:00Z",
   "checks": [
     {
@@ -9,7 +9,7 @@
       "status": "pass",
       "scenarioType": "failure",
       "command": "make verify-week-03",
-      "evidence": "Se introdujo de forma controlada un valor ficticio con formato de credencial; el CI fallo en secret_scan. Luego se retiro el valor de prueba y el CI paso correctamente sin exponer el contenido en la evidencia."
+      "evidence": "Se introdujo un secreto (EXPO_PUBLIC_SECRET=123) y el CI falló en secret_scan. Luego se removió el secreto y el CI pasó correctamente."
     }
   ]
 }

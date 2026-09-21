@@ -6,7 +6,7 @@
     {
       "studentId": "sixto",
       "commitShas": [
-        "ca5b0c330164255c8423e9351555e08534587be5"
+        "PENDING_SHA_____________________________"
       ],
       "files": [
         "docs/threat-model.md"
@@ -23,7 +23,7 @@
     {
       "studentId": "3522110726",
       "commitShas": [
-        "ca5b0c330164255c8423e9351555e08534587be5"
+        "748e86532df5834eac17b5b73fceede8bda1b3cc"
       ],
       "files": [
         ".github/workflows/week-03-ci-amenazas-feedback.yml"
@@ -40,7 +40,7 @@
     {
       "studentId": "integrante-3",
       "commitShas": [
-        "ca5b0c330164255c8423e9351555e08534587be5"
+        "PENDING_SHA_____________________________"
       ],
       "files": [
         "evidence/week-03/engineering.json"
@@ -57,7 +57,7 @@
     {
       "studentId": "omar",
       "commitShas": [
-        "ca5b0c330164255c8423e9351555e08534587be5"
+        "PENDING_SHA_____________________________"
       ],
       "files": [
         "reports/week-03/security.json"
