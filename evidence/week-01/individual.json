@@ -52,6 +52,24 @@
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
       "observedResult": "La prueba falló con CampusOps temporal porque no encontró el texto CampusOps; después de restaurar la etiqueta, pasó con 1 suite y 1 prueba aprobadas.",
       "explanation": "La contribución reproduce una regresión reversible en App.tsx y corrige la causa sin modificar course-tests/smoke.test.tsx. El fallo aisló el contrato visible de la pantalla y la segunda ejecución confirmó la corrección."
+    },
+    {
+      "studentId": "jesus-vegmed",
+      "commitShas": [
+        "e1448c36a4c7f64f78014bdd4739cb185d29d8e6"
+      ],
+      "files": [
+        "reports/week-01/failure.json",
+        "reports/week-01/verify.json"
+      ],
+      "tests": [],
+      "reviews": [
+        "Se reviso la evidencia historica de Semana 01 para conservar cuatro registros trazables con SHAs completos."
+      ],
+      "prediction": "La evidencia individual debe validar cuando los cuatro colaboradores visibles tienen registros unicos y verificables.",
+      "command": "python tools/course_public_evaluator.py --week 1 --mode public --repo .",
+      "observedResult": "El esquema individual queda completo con cuatro entradas y SHAs completos.",
+      "explanation": "Se completo la trazabilidad historica del cuarto colaborador para que el feedback de Semana 01 pueda ejecutarse sobre la rama principal actual sin fallar por formato de evidencia."
     }
   ]
 }
