@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-          fetch-tags: true
+          fetch-tags: ${{ github.ref_type != 'tag' }}
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
