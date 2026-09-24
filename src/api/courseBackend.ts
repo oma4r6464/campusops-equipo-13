@@ -4,15 +4,22 @@ export type BackendHealth = Readonly<{
   contractVersion: 1;
 }>;
 
-const DEFAULT_URL = 'http://127.0.0.1:4310';
-
 export async function getBackendHealth(
-  baseUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL ?? DEFAULT_URL,
+  baseUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL,
 ): Promise<BackendHealth> {
+  if (!baseUrl) {
+    
+    console.warn('[courseBackend] EXPO_PUBLIC_COURSE_BACKEND_URL no está configurada.');
+    throw new Error('Servicio no disponible temporalmente.');
+  }
+
   const response = await fetch(`${baseUrl}/health`);
   if (!response.ok) {
-    throw new Error(`Backend health failed with ${response.status}`);
+    
+    console.warn(`[courseBackend] health check failed with status ${response.status}`);
+    throw new Error('Servicio no disponible temporalmente.');
   }
+
   const payload: unknown = await response.json();
   if (
     typeof payload !== 'object' ||
@@ -22,7 +29,9 @@ export async function getBackendHealth(
     !('contractVersion' in payload) ||
     payload.contractVersion !== 1
   ) {
-    throw new Error('Backend health contract mismatch');
+    console.warn('[courseBackend] health contract mismatch', payload);
+    throw new Error('Servicio no disponible temporalmente.');
   }
+
   return payload as BackendHealth;
 }
