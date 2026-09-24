@@ -2,7 +2,7 @@
 
 ## Datos de entrega
 
-- Nombre: Samuel Jonathan Trujillo Bolanos
+- Nombre: Samuel Jonathan Trujillo Bolaños
 - Matricula: 3523110007
 - GitHub: KIRA21M
 - Repositorio: https://github.com/oma4r6464/campusops-equipo-13
