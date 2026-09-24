@@ -1,0 +1,12 @@
+Comandos revisados:
+git status --short
+Get-Content .gitignore
+
+Resultado observado:
+.gitignore contiene .env.
+.env.example queda versionado como plantilla sin secretos.
+.env no aparece como archivo a agregar.
+
+Interpretacion:
+La configuracion local real debe vivir en .env y no debe subirse al repositorio.
+La plantilla publica solo conserva el nombre de EXPO_PUBLIC_COURSE_BACKEND_URL sin valor.

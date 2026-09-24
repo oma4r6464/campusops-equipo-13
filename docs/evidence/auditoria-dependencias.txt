@@ -1,0 +1,13 @@
+Comando:
+npm audit --omit=dev --audit-level=high
+
+Resultado observado:
+2 high severity vulnerabilities.
+
+Paquetes reportados:
+- @xmldom/xmldom
+- js-yaml
+
+Interpretacion:
+No se actualizo el lockfile porque el proyecto mantiene versiones fijadas para reproducibilidad academica.
+El riesgo queda documentado para revisarlo antes de distribucion fuera del entorno del curso.

@@ -1,0 +1,8 @@
+Comando:
+npm run typecheck
+
+Resultado observado:
+tsc --noEmit finalizo sin errores.
+
+Interpretacion:
+Los cambios de sanitizacion y pruebas conservan compatibilidad TypeScript estricta.

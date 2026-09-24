@@ -1,0 +1,13 @@
+Comando:
+npm test -- --ci --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security-audit.test.ts
+
+Resultado observado:
+PASS course-tests/week-04-security-audit.test.ts
+PASS course-tests/public/week-04.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests: 3 passed, 3 total
+
+Interpretacion:
+La prueba publica confirma que se redactan authorization, email, displayName, location, photos e internalComments.
+La prueba propia confirma objetos anidados, listas, claves con guion bajo y que la entrada original no se muta.
