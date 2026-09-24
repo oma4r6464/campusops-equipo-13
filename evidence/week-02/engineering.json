@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 2,
-  "commitSha": "a67ca4b6b7af7fb4644dc217142e2f47b9474849",
+  "commitSha": "8506f29603c960ff2d0cb5e310670ef8e6a03b10",
   "decision": "El equipo eligio separar CampusOps en capas ui, application, domain e infrastructure, usando App.tsx como raiz de composicion. La UI consume CampusOpsServices y la infraestructura implementa puertos como IncidentRepository con datos ficticios deterministas para esta semana.",
   "alternatives": [
     "Pantallas conectadas directamente a servicios o datos fake: menor esfuerzo inicial, pero mezcla presentacion, proveedor y reglas, dificulta pruebas y hace costoso cambiar transporte o almacenamiento.",
