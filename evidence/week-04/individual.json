@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "Armando",
+      "commitShas": [
+        "0413c02adb83bc46ccf40fc739902c61f880d014"
+      ],
+      "files": [
+        "src/core/telemetry/sanitizer.ts",
+        "src/core/telemetry/sanitizer.test.ts",
+        "src/course-evaluation/index.ts"
+      ],
+      "tests": [
+        "src/core/telemetry/sanitizer.test.ts",
+        "course-tests/public/week-04.test.ts"
+      ],
+      "reviews": [],
+      "prediction": "El test público de sanitización de telemetría pasará y los objetos anidados serán redactados sin mutar el original.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-04.test.ts",
+      "observedResult": "Los tests pasaron satisfactoriamente verificando que la data sensible es redactada.",
+      "explanation": "Se implementó un recorrido recursivo en sanitizer.ts para normalizar las claves y ocultar las especificadas en el contrato."
+    }
+  ]
+}
