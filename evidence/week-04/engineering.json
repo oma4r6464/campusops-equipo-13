@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "commitSha": "6a4cb60a6a4cb60a6a4cb60a6a4cb60a6a4cb60",
+  "decision": "Se implementó un sanitizador recursivo para la telemetría que oculta campos sensibles (como contraseñas, tokens y ubicaciones) sin mutar la data original.",
+  "alternatives": [
+    "No usar recursión y limpiar solo el primer nivel del objeto.",
+    "Mutar el objeto original para ahorrar memoria."
+  ],
+  "tradeoff": "La recursión sin mutación aumenta el consumo de memoria al crear nuevos objetos y arreglos, pero asegura que el estado de la aplicación no se vea afectado de manera impredecible al enviar telemetría.",
+  "requirementIds": [
+    "SECURITY-01"
+  ],
+  "verification": [
+    {
+      "command": "npm test -- --ci --runInBand course-tests/public/week-04.test.ts",
+      "result": "pass",
+      "evidence": "Los tests públicos aseguran que el contrato de redactForTelemetry se cumple correctamente, ocultando los datos personales y manteniendo el contexto técnico."
+    }
+  ]
+}
