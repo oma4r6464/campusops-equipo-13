@@ -7,13 +7,14 @@ import type {
   SyncRecord,
 } from './contracts';
 import type { IncidentLocation } from '../campusops/contracts';
+import { sanitizeTelemetry } from '../core/telemetry/sanitizer';
 
 function pending(name: string): never {
   throw new Error(`${name} must be implemented in the assigned week`);
 }
 
-export function redactForTelemetry(_input: unknown): unknown {
-  return pending('redactForTelemetry');
+export function redactForTelemetry(input: unknown): unknown {
+  return sanitizeTelemetry(input);
 }
 
 export function parseRemoteResource(_input: unknown): ParseResult {
