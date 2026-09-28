@@ -38,7 +38,7 @@
     },
     {
       "studentId": "3523110007",
-      "commitShas": ["93a677e074030236176647151607ab0cc5868da4"],
+      "commitShas": ["5aa1230cb326ab49a4cab70a87defab81903d261"],
       "files": ["docs/security-controls.md", "evidence/week-04/individual.json", "reports/week-04/secret-scan.json", "reports/week-04/negative-tests.json"],
       "tests": ["npm run typecheck", "npm run lint", "npm test -- --ci --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts src/core/telemetry/sanitizer.test.ts"],
       "reviews": ["pull requests #12, #13 y #14"],
@@ -49,3 +49,4 @@
     }
   ]
 }
+
