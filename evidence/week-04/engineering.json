@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "commitSha": "9ada5707048124b32701af0686de52e566056cad",
+  "decision": "Centralizar la sanitización en una función pura reutilizable y emitir desde los errores del backend sólo contexto técnico. Para sesión futura se elige SecureStore; esta entrega no persiste tokens ni datos sensibles.",
+  "alternatives": [
+    "Usar AsyncStorage para facilitar persistencia multiplataforma, descartado porque no ofrece protección suficiente para tokens.",
+    "Guardar tokens en archivos JSON o estado persistido propio, descartado porque aumenta la superficie de exposición y el mantenimiento criptográfico.",
+    "Usar expo-secure-store para sesión futura y mantener en memoria los datos de pantalla, elegido por delegar protección al almacén seguro del sistema operativo."
+  ],
+  "tradeoff": "SecureStore reduce la exposición de credenciales frente a almacenamiento plano, pero tiene límites de tamaño, depende de capacidades del dispositivo y puede perder datos al desinstalar. La sanitización exige disciplina en cada salida y no reemplaza autorización ni controles de terceros.",
+  "requirementIds": ["AC-01", "AC-02", "AC-03", "AC-04", "AC-05"],
+  "verification": [
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "tsc --noEmit terminó sin errores."
+    },
+    {
+      "command": "npm run lint",
+      "result": "pass",
+      "evidence": "ESLint terminó sin errores ni advertencias."
+    },
+    {
+      "command": "npm test -- --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts",
+      "result": "pass",
+      "evidence": "2 suites y 3 pruebas pasan, incluyendo estructuras anidadas y camino de error."
+    },
+    {
+      "command": "python tools/course_public_evaluator.py --week 04 --mode verify --execute-toolchain",
+      "result": "pass",
+      "evidence": "secret_scan reportó hits=[] y verify terminó status=pass."
+    }
+  ]
+}
