@@ -4,48 +4,48 @@
   "teamId": "equipo-13",
   "members": [
     {
-      "studentId": "sixto",
-      "commitShas": ["9ada5707048124b32701af0686de52e566056cad"],
-      "files": ["src/security/redactForTelemetry.ts", "course-tests/week-04-security.test.ts"],
-      "tests": ["course-tests/week-04-security.test.ts"],
+      "studentId": "oma4r6464",
+      "commitShas": ["9c9fbdfb7fb1f7e78454ed6b3d7f5431670e0678"],
+      "files": ["src/api/courseBackend.ts", "course-backend/server.mjs", "course-tests/week-04-security.test.ts"],
+      "tests": ["course-tests/week-04-security.test.ts", "npm run backend:self-test"],
+      "reviews": ["docs/security-controls.md"],
+      "prediction": "Los errores publicos del backend seran genericos y CORS dejara de aceptar cualquier origen.",
+      "command": "npm test -- --ci --runInBand course-tests/week-04-security.test.ts && npm run backend:self-test",
+      "observedResult": "Las pruebas de errores genericos pasaron y el self-test del backend siguio pasando.",
+      "explanation": "Se integro la aportacion del PR #12 conservando reproducibilidad del backend local y evitando filtrar detalles tecnicos al usuario."
+    },
+    {
+      "studentId": "ArmandoValerio",
+      "commitShas": ["0413c02adb83bc46ccf40fc739902c61f880d014"],
+      "files": ["src/core/telemetry/sanitizer.ts", "src/core/telemetry/sanitizer.test.ts", "src/course-evaluation/index.ts"],
+      "tests": ["src/core/telemetry/sanitizer.test.ts", "course-tests/public/week-04.test.ts"],
       "reviews": [],
-      "prediction": "Los valores sensibles dentro de listas y objetos anidados serán sustituidos sin mutar la entrada.",
-      "command": "npm test -- --runInBand course-tests/week-04-security.test.ts",
-      "observedResult": "Las pruebas de sanitización y error pasan.",
-      "explanation": "Se implementó y verificó la función recursiva de redacción."
+      "prediction": "La telemetria anidada sera redactada sin mutar el objeto original.",
+      "command": "npm test -- --ci --runInBand src/core/telemetry/sanitizer.test.ts course-tests/public/week-04.test.ts",
+      "observedResult": "Las pruebas de sanitizacion y contrato publico pasaron.",
+      "explanation": "Se integro la utilidad de telemetria del PR #13 como wrapper hacia la funcion central para evitar reglas duplicadas."
     },
     {
-      "studentId": "3522110726",
-      "commitShas": ["9ada5707048124b32701af0686de52e566056cad"],
-      "files": ["src/infrastructure/system/courseBackendHealthReader.ts"],
+      "studentId": "jesus-vegmed",
+      "commitShas": ["9ada5707048124b32701af0686de52e566056cad", "19e081fc3103130e5f213a1b9b73b5ed8535a1d8"],
+      "files": ["src/security/redactForTelemetry.ts", "src/infrastructure/system/courseBackendHealthReader.ts", "docs/security-controls.md", "reports/week-04/negative-tests.json"],
       "tests": ["course-tests/week-04-security.test.ts"],
-      "reviews": [],
-      "prediction": "El camino offline conservará sólo contexto técnico y nunca el texto de la excepción.",
-      "command": "npm test -- --runInBand course-tests/week-04-security.test.ts",
-      "observedResult": "El evento contiene status, attempt y durationMs, sin el token sintético.",
-      "explanation": "Se conectó el sanitizador al manejo real de error del health reader."
-    },
-    {
-      "studentId": "integrante-3",
-      "commitShas": ["9ada5707048124b32701af0686de52e566056cad"],
-      "files": ["docs/security-controls.md"],
-      "tests": [],
-      "reviews": ["docs/threat-model.md"],
-      "prediction": "La documentación relacionará activos, amenazas, almacenamiento seguro y riesgo residual.",
-      "command": "git diff 9ada570b4^..9ada570b -- docs/security-controls.md",
-      "observedResult": "El documento contiene alternativas de almacenamiento y controles verificables.",
-      "explanation": "Se documentó la decisión técnica y sus límites usando amenazas de Semana 03."
-    },
-    {
-      "studentId": "omar",
-      "commitShas": ["9ada5707048124b32701af0686de52e566056cad"],
-      "files": ["reports/week-04/secret-scan.json", "reports/week-04/negative-tests.json"],
-      "tests": [],
       "reviews": ["evidence/week-04/engineering.json"],
-      "prediction": "Los reportes tendrán un SHA completo y casos boundary/failure reproducibles.",
+      "prediction": "La evidencia de Week 04 conectara sanitizacion, errores seguros y reportes reproducibles.",
       "command": "python tools/course_public_evaluator.py --week 04 --mode verify --execute-toolchain",
-      "observedResult": "El escaneo terminó con hits=[] y los checks de toolchain pasaron.",
-      "explanation": "Se indexaron los resultados observables de secretos y exposición negativa."
+      "observedResult": "El modo verify paso con secret_scan y workflow_integrity en pass.",
+      "explanation": "Se integro la base formal del PR #14 con controles, reportes y documentacion de privacidad."
+    },
+    {
+      "studentId": "3523110007",
+      "commitShas": ["93a677e074030236176647151607ab0cc5868da4"],
+      "files": ["docs/security-controls.md", "evidence/week-04/individual.json", "reports/week-04/secret-scan.json", "reports/week-04/negative-tests.json"],
+      "tests": ["npm run typecheck", "npm run lint", "npm test -- --ci --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts src/core/telemetry/sanitizer.test.ts"],
+      "reviews": ["pull requests #12, #13 y #14"],
+      "prediction": "La integracion final conservara las aportaciones sin evidencia contradictoria y dejara cuatro participaciones verificables.",
+      "command": "npm run typecheck && npm run lint && npm test -- --ci --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts src/core/telemetry/sanitizer.test.ts",
+      "observedResult": "Typecheck, lint y 8 pruebas de Week 04 pasaron en el worktree de integracion.",
+      "explanation": "Samuel Jonathan Trujillo Bolanos, GitHub KIRA21M, consolido los PRs, resolvio conflictos y alineo evidencia final de Semana 4."
     }
   ]
 }

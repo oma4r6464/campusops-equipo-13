@@ -1,22 +1,36 @@
 {
   "schemaVersion": 1,
   "week": 4,
-  "commitSha": "9ada5707048124b32701af0686de52e566056cad",
-  "generatedAt": "2026-09-26T21:12:00Z",
+  "commitSha": "93a677e074030236176647151607ab0cc5868da4",
+  "generatedAt": "2026-09-28T01:10:00Z",
   "checks": [
     {
       "id": "nested-sensitive-values",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm test -- --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts",
-      "evidence": "3 pruebas pasan; objetos anidados, listas, cabeceras x-access-token y la entrada original quedan cubiertos."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-04.test.ts course-tests/week-04-security.test.ts src/core/telemetry/sanitizer.test.ts",
+      "evidence": "3 suites y 8 pruebas pasaron; se cubren objetos anidados, listas, x-access-token, user_id, no mutacion de entrada y contrato publico."
     },
     {
       "id": "backend-error-path",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm test -- --runInBand course-tests/week-04-security.test.ts",
-      "evidence": "El error sintético con token produce sólo status=offline, attempt=1 y durationMs; el token no aparece en el evento."
+      "command": "npm test -- --ci --runInBand course-tests/week-04-security.test.ts",
+      "evidence": "El error sintetico con token produce solo status=offline, attempt=1 y durationMs; el token no aparece en el evento serializado."
+    },
+    {
+      "id": "generic-public-errors",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-04-security.test.ts",
+      "evidence": "Los casos de HTTP 500 y contrato invalido lanzan Servicio no disponible temporalmente sin exponer status, payload ni token."
+    },
+    {
+      "id": "cors-controlled-origin",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm run backend:self-test",
+      "evidence": "Controlled backend self-test passed tras cambiar access-control-allow-origin a COURSE_BACKEND_ALLOWED_ORIGIN con valor local ficticio por defecto."
     }
   ]
 }
