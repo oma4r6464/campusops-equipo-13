@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "week": 1,
+  "week": 3,
   "mode": "public",
   "commitSha": "0bbb8e91e00bca6eec2fc8cb12168dcad8c016f9",
-  "evaluatedAt": "2026-09-28T01:14:19.681927+00:00",
+  "evaluatedAt": "2026-09-28T01:14:24.038592+00:00",
   "status": "pass",
   "checks": [
     {
@@ -37,17 +37,17 @@
       "detail": "missing/empty=[]"
     },
     {
-      "id": "schema:reports/week-01/baseline.json",
+      "id": "schema:reports/week-03/security.json",
       "status": "pass",
-      "detail": "2 checks indexed, 1 boundary/failure; report evaluates HEAD"
+      "detail": "1 checks indexed, 1 boundary/failure; report evaluates HEAD"
     },
     {
-      "id": "schema:evidence/week-01/engineering.json",
+      "id": "schema:evidence/week-03/engineering.json",
       "status": "pass",
       "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
     },
     {
-      "id": "schema:evidence/week-01/individual.json",
+      "id": "schema:evidence/week-03/individual.json",
       "status": "pass",
       "detail": "three individual evidence records found"
     }
