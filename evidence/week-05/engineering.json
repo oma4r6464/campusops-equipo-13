@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "2809ceae3de61fed2805d91d4b1a667fe5c4c2d9",
+  "commitSha": "bfb777eba78c4bead92f3dafb80bcdba72d1b0bd",
   "decision": "Separar estrictamente el DTO de red (el sobre remoto), el modelo de dominio interno de CampusOps y la representación tipada de errores. Esta decisión asegura que un payload malformado o un nulo válido se analice en el límite de la red mediante `parseRemoteResource`, aislando a la interfaz de usuario de los detalles de transporte y variantes de error del simulador.",
   "alternatives": [
     "Usar el DTO de red directamente en toda la UI y vistas. Fue descartado porque cualquier cambio en el backend obligaría a reescribir los componentes visuales y no los protegería estructuralmente contra respuestas con payload nulo o datos ausentes.",
