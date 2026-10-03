@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 4,
   "mode": "public",
-  "commitSha": "0bbb8e91e00bca6eec2fc8cb12168dcad8c016f9",
-  "evaluatedAt": "2026-09-28T01:14:26.060326+00:00",
+  "commitSha": "9a463d0600f33f5a21bece992db35384a8ed2235",
+  "evaluatedAt": "2026-09-28T02:56:32.280689+00:00",
   "status": "pass",
   "checks": [
     {
@@ -39,17 +39,17 @@
     {
       "id": "schema:reports/week-04/secret-scan.json",
       "status": "pass",
-      "detail": "2 checks indexed, 2 boundary/failure; report evaluates HEAD"
+      "detail": "2 checks indexed, 2 boundary/failure; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:reports/week-04/negative-tests.json",
       "status": "pass",
-      "detail": "4 checks indexed, 4 boundary/failure; report evaluates HEAD"
+      "detail": "4 checks indexed, 4 boundary/failure; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:evidence/week-04/engineering.json",
       "status": "pass",
-      "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
+      "detail": "decision evidence is substantive and reproducible; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:evidence/week-04/individual.json",
