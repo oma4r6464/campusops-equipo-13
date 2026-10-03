@@ -1,4 +1,5 @@
-import { parseRemoteResource, type ParseResult } from '../course-evaluation';
+import { parseRemoteResource } from '../course-evaluation';
+import type { ParseResult } from '../course-evaluation/contracts';
 import { redactForTelemetry } from '../security/redactForTelemetry';
 
 export type RemoteIncident = Readonly<{

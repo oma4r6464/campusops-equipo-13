@@ -26,6 +26,7 @@ export function parseRemoteResource(_input: unknown): ParseResult {
   if (
     typeof resource.id !== 'string' ||
     resource.id.trim().length === 0 ||
+    typeof resource.version !== 'number' ||
     !Number.isInteger(resource.version) ||
     resource.version < 0 ||
     typeof resource.status !== 'string' ||
