@@ -1,10 +1,22 @@
 export type UserProfile = 'reporter' | 'technician' | 'coordinator';
 
-export type IncidentStatus = 'open' | 'assigned' | 'in_progress' | 'resolved' | 'closed';
+export const INCIDENT_CATEGORIES = [
+  'electrical',
+  'laboratory',
+  'water',
+  'connectivity',
+  'equipment',
+  'safety',
+  'maintenance',
+] as const;
 
-export type IncidentPriority = 'low' | 'medium' | 'high';
+export type IncidentCategory = (typeof INCIDENT_CATEGORIES)[number];
+export type IncidentStatus = (typeof INCIDENT_STATUSES)[number];
+export type IncidentPriority = (typeof INCIDENT_PRIORITIES)[number];
 
-export type IncidentCategory = 'electricity' | 'water' | 'connectivity' | 'equipment' | 'safety';
+export const INCIDENT_STATUSES = ['open', 'assigned', 'in_progress', 'resolved', 'closed'] as const;
+
+export const INCIDENT_PRIORITIES = ['low', 'medium', 'high'] as const;
 
 export type Incident = Readonly<{
   id: string;
@@ -16,7 +28,14 @@ export type Incident = Readonly<{
   locationLabel: string;
   reporterProfile: UserProfile;
   assignedTechnicianId: string | null;
-  updatedAt: string;
+  /** El backend didactico no publica fecha de actualizacion; null significa desconocida. */
+  updatedAt: string | null;
+}>;
+
+export type NewIncidentDraft = Readonly<{
+  category: IncidentCategory;
+  description: string;
+  location: string;
 }>;
 
 export interface IncidentRepository {

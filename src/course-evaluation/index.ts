@@ -7,6 +7,7 @@ import type {
   SyncRecord,
 } from './contracts';
 import type { IncidentLocation } from '../campusops/contracts';
+import { parseRemoteEnvelope } from '../api/remoteResource';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
 
 function pending(name: string): never {
@@ -17,35 +18,8 @@ export function redactForTelemetry(input: unknown): unknown {
   return redactTelemetry(input);
 }
 
-export function parseRemoteResource(_input: unknown): ParseResult {
-  if (_input === null || typeof _input !== 'object' || Array.isArray(_input)) {
-    return { ok: false, error: 'contract' };
-  }
-
-  const resource = _input as Record<string, unknown>;
-  if (
-    typeof resource.id !== 'string' ||
-    resource.id.trim().length === 0 ||
-    typeof resource.version !== 'number' ||
-    !Number.isInteger(resource.version) ||
-    resource.version < 0 ||
-    typeof resource.status !== 'string' ||
-    resource.status.trim().length === 0 ||
-    (resource.payload !== null &&
-      (typeof resource.payload !== 'object' || Array.isArray(resource.payload)))
-  ) {
-    return { ok: false, error: 'contract' };
-  }
-
-  return {
-    ok: true,
-    value: {
-      id: resource.id,
-      version: resource.version,
-      status: resource.status,
-      payload: resource.payload as JsonObject | null,
-    },
-  };
+export function parseRemoteResource(input: unknown): ParseResult {
+  return parseRemoteEnvelope(input);
 }
 
 export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
