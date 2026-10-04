@@ -1,4 +1,4 @@
-import { parseRemoteResource } from '../course-evaluation';
+import { parseRemoteEnvelope } from './remoteResource';
 import type { ParseResult } from '../course-evaluation/contracts';
 import { redactForTelemetry } from '../security/redactForTelemetry';
 
@@ -38,8 +38,12 @@ type IncidentClient = Readonly<{
   create(input: Readonly<{ category: string; description: string; location: string }>, idempotencyKey: string): Promise<RemoteIncident>;
 }>;
 
+function isAbortError(error: unknown): boolean {
+  return typeof error === 'object' && error !== null && (error as { name?: unknown }).name === 'AbortError';
+}
+
 function parseResource(input: unknown): RemoteIncident {
-  const parsed: ParseResult = parseRemoteResource(input);
+  const parsed: ParseResult = parseRemoteEnvelope(input);
   if (!parsed.ok) throw new IncidentClientError('contract', 'Respuesta de incidencia invalida.');
   return parsed.value;
 }
@@ -88,7 +92,7 @@ export function createCourseIncidentClient(options: ClientOptions): IncidentClie
     } catch (error) {
       const clientError = error instanceof IncidentClientError
         ? error
-        : error instanceof DOMException && error.name === 'AbortError'
+        : isAbortError(error)
           ? new IncidentClientError('timeout', 'La consulta excedio el tiempo permitido.')
           : new IncidentClientError('network', 'No se pudo consultar incidencias.');
       options.onTelemetry?.(redactForTelemetry({ kind: clientError.kind, status: clientError.status, attempt: 1 }));
