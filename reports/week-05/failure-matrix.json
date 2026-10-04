@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "053415605bc7101231505ff0151f7cd4d1b98c02",
+  "commitSha": "527c461728281cf4c9af36107a92eabc0d7e516e",
   "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
     {"id": "malformed-envelope", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "Sobre con id vacio, version invalida o DTO incompleto produce error contract/malformed sin llegar al dominio."},
