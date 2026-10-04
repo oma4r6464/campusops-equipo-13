@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "c84fed18ac6c92008c1d6b7c37f59f25ecfbaf3c",
+  "commitSha": "053415605bc7101231505ff0151f7cd4d1b98c02",
   "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
     {"id": "remote-list", "status": "pass", "scenarioType": "nominal", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "La lista valida conserva el sobre remoto, valida DTO y se consume desde casos de uso sin HTTP directo en pantalla."},
