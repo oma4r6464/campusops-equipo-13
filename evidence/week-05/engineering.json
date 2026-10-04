@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "bfb777eba78c4bead92f3dafb80bcdba72d1b0bd",
-  "decision": "Separar estrictamente el DTO de red (el sobre remoto), el modelo de dominio interno de CampusOps y la representación tipada de errores. Esta decisión asegura que un payload malformado o un nulo válido se analice en el límite de la red mediante `parseRemoteResource`, aislando a la interfaz de usuario de los detalles de transporte y variantes de error del simulador.",
+  "commitSha": "adca2edee01cd3d07f51ce3f4660b94ebe67e6cf",
+  "decision": "Separar el cliente HTTP de la interfaz y conservar el DTO remoto hasta que pase parseRemoteResource. La capa de cliente clasifica contract, timeout, server y network, conserva payload null y solo entrega a la aplicacion datos validados.",
   "alternatives": [
-    "Usar el DTO de red directamente en toda la UI y vistas. Fue descartado porque cualquier cambio en el backend obligaría a reescribir los componentes visuales y no los protegería estructuralmente contra respuestas con payload nulo o datos ausentes.",
-    "Lanzar excepciones HTTP genéricas (brutas) a la interfaz. Fue descartado porque fuerza a la vista a entender códigos de estado técnicos (500, 429) en lugar de consumir errores de dominio que permitan flujos amigables."
+    "Hacer fetch directamente en CampusOpsScreen, descartado porque mezcla transporte, estados visuales y validacion de contrato.",
+    "Convertir null en un incidente vacio, descartado porque inventa datos y confunde un limite valido con una respuesta incompleta.",
+    "Usar un cliente aislado con fetch inyectable y AbortController, elegido porque permite fixtures deterministas, timeout reproducible y pruebas sin Internet."
   ],
-  "tradeoff": "Esta arquitectura defensiva requiere crear adaptadores y múltiples definiciones de tipos (boilerplate), aumentando el trabajo de mantenimiento por cada endpoint nuevo. A cambio, la resiliencia aumenta significativamente al lidiar con las variantes como `malformed`, `server_error` o `timeout` de manera segura.",
-  "requirementIds": [],
+  "tradeoff": "El cliente agrega tipos y una pequena capa de mapeo, pero centraliza la validacion y permite distinguir fallos sin filtrar respuestas remotas. El timeout fijo debe ajustarse por producto, mientras que la prueba conserva el limite configurable.",
+  "requirementIds": ["AC-01", "AC-02", "AC-03", "AC-04", "AC-05"],
   "verification": [
-    {
-      "command": "make public-test-week-05",
-      "result": "pending",
-      "evidence": "Ejecución pendiente tras la integración con los adaptadores de TypeScript."
-    }
+    {"command": "npm run typecheck", "result": "pass", "evidence": "tsc --noEmit termino sin errores."},
+    {"command": "npm run lint", "result": "pass", "evidence": "ESLint termino sin errores."},
+    {"command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts", "result": "pass", "evidence": "14 pruebas pasaron: 5 publicas y 9 del cliente."},
+    {"command": "npm run backend:self-test", "result": "pass", "evidence": "Las variantes del backend didactico pasaron sin Internet publico."}
   ]
 }

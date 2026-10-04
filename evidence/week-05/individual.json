@@ -4,54 +4,48 @@
   "teamId": "equipo-13",
   "members": [
     {
-      "studentId": "3522110726",
-      "commitShas": [
-        "bfb777eba78c4bead92f3dafb80bcdba72d1b0bd"
-      ],
-      "files": [
-        "docs/api-contract.md"
-      ],
-      "tests": [],
-      "reviews": [
-        "Revisión cruzada de api-contract.md"
-      ],
-      "prediction": "El contrato aislará los fallos de red y payload nulos para que no afecten a la interfaz de usuario.",
-      "command": "make public-test-week-05",
-      "observedResult": "Pendiente de integración final",
-      "explanation": "Se documentó el contrato de datos de Semana 05 (lista, detalle, creación) definiendo DTO remoto, objeto de dominio y representación de errores según los criterios del backend."
+      "studentId": "oma4r6464",
+      "commitShas": ["b05af2791cbdb99b6a778c9e14883037f7d95c78"],
+      "files": ["src/api/courseIncidentClient.ts", "docs/api-contract.md"],
+      "tests": ["course-tests/week-05-client.test.ts"],
+      "reviews": [],
+      "prediction": "El cliente aislado permitira probar lista y detalle sin que la pantalla conozca fetch.",
+      "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts",
+      "observedResult": "La suite del cliente paso con lista, detalle, null, errores y creacion.",
+      "explanation": "Se implemento la frontera HTTP y su contrato documentado para mantener separadas respuestas remotas y datos de aplicacion."
     },
     {
       "studentId": "ArmandoValerio",
-      "commitShas": [],
-      "files": [],
-      "tests": [],
+      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
+      "files": ["src/course-evaluation/index.ts", "course-tests/public/week-05.test.ts"],
+      "tests": ["course-tests/public/week-05.test.ts"],
       "reviews": [],
-      "prediction": "",
-      "command": "",
-      "observedResult": "",
-      "explanation": ""
+      "prediction": "El parser rechazara sobres incompletos y aceptara payload null como limite valido.",
+      "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/public/week-05.test.ts",
+      "observedResult": "Las 5 pruebas publicas del contrato pasaron.",
+      "explanation": "Se completo la validacion comun del sobre ignorando campos futuros y sin mutar los datos remotos."
     },
     {
       "studentId": "jesus-vegmed",
-      "commitShas": [],
-      "files": [],
-      "tests": [],
-      "reviews": [],
-      "prediction": "",
-      "command": "",
-      "observedResult": "",
-      "explanation": ""
+      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
+      "files": ["course-tests/week-05-client.test.ts", "reports/week-05/failure-matrix.json"],
+      "tests": ["course-tests/week-05-client.test.ts", "npm run backend:self-test"],
+      "reviews": ["docs/api-contract.md"],
+      "prediction": "Timeout, error 500 y JSON invalido tendran clases de error distintas y telemetria sin tokens.",
+      "command": "npm run backend:self-test",
+      "observedResult": "El self-test del backend local paso y la suite del cliente paso los nueve casos.",
+      "explanation": "Se verificaron variantes reproducibles de lentitud y fallo, ademas de sanitizacion previa de eventos tecnicos."
     },
     {
       "studentId": "3523110007",
-      "commitShas": [],
-      "files": [],
-      "tests": [],
-      "reviews": [],
-      "prediction": "",
-      "command": "",
-      "observedResult": "",
-      "explanation": ""
+      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
+      "files": ["evidence/week-05/engineering.json", "reports/week-05/contract-tests.json"],
+      "tests": ["npm run typecheck", "npm run lint"],
+      "reviews": ["evidence/week-05/engineering.json"],
+      "prediction": "La evidencia final apuntara al SHA funcional y mantendra comandos reproducibles en fixtures locales.",
+      "command": "npm run typecheck; npm run lint",
+      "observedResult": "Typecheck y lint terminaron sin errores.",
+      "explanation": "Se consolido la evidencia tecnica y se alinearon los reportes con el commit verificado de Semana 05."
     }
   ]
 }
