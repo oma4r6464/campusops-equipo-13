@@ -4,48 +4,48 @@
   "teamId": "equipo-13",
   "members": [
     {
-      "studentId": "oma4r6464",
-      "commitShas": ["b05af2791cbdb99b6a778c9e14883037f7d95c78"],
-      "files": ["src/api/courseIncidentClient.ts", "docs/api-contract.md"],
-      "tests": ["course-tests/week-05-client.test.ts"],
-      "reviews": [],
-      "prediction": "El cliente aislado permitira probar lista y detalle sin que la pantalla conozca fetch.",
-      "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts",
-      "observedResult": "La suite del cliente paso con lista, detalle, null, errores y creacion.",
-      "explanation": "Se implemento la frontera HTTP y su contrato documentado para mantener separadas respuestas remotas y datos de aplicacion."
-    },
-    {
       "studentId": "ArmandoValerio",
-      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
-      "files": ["src/course-evaluation/index.ts", "course-tests/public/week-05.test.ts"],
+      "commitShas": ["bfb777eba78c4bead92f3dafb80bcdba72d1b0bd", "7cb77903d165d650f5d7bfb00765e5c1f74bfb29"],
+      "files": ["docs/api-contract.md", "evidence/week-05/engineering.json"],
       "tests": ["course-tests/public/week-05.test.ts"],
-      "reviews": [],
-      "prediction": "El parser rechazara sobres incompletos y aceptara payload null como limite valido.",
-      "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/public/week-05.test.ts",
-      "observedResult": "Las 5 pruebas publicas del contrato pasaron.",
-      "explanation": "Se completo la validacion comun del sobre ignorando campos futuros y sin mutar los datos remotos."
+      "reviews": ["docs/CAMPUSOPS_API.md", "course-backend/README.md"],
+      "prediction": "El contrato separara DTO, dominio y errores para que payload null e invalidos no se confundan.",
+      "command": "python tools/course_public_evaluator.py --week 5 --mode public",
+      "observedResult": "El evaluador publico reconocio los archivos requeridos y solo exigio realinear SHA antes del cierre final.",
+      "explanation": "Documento el contrato de lista, detalle y creacion, incluyendo payload null valido y errores tipados."
     },
     {
       "studentId": "jesus-vegmed",
-      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
-      "files": ["course-tests/week-05-client.test.ts", "reports/week-05/failure-matrix.json"],
+      "commitShas": ["b05af2791cbdb99b6a778c9e14883037f7d95c78", "adca2edee01cd3d07f51ce3f4660b94ebe67e6cf", "e90b6a1e903565e0ea22910de18320c860b11e4d"],
+      "files": ["src/api/courseIncidentClient.ts", "src/api/remoteResource.ts", "course-tests/week-05-client.test.ts", "reports/week-05/failure-matrix.json"],
       "tests": ["course-tests/week-05-client.test.ts", "npm run backend:self-test"],
-      "reviews": ["docs/api-contract.md"],
+      "reviews": [],
       "prediction": "Timeout, error 500 y JSON invalido tendran clases de error distintas y telemetria sin tokens.",
-      "command": "npm run backend:self-test",
-      "observedResult": "El self-test del backend local paso y la suite del cliente paso los nueve casos.",
-      "explanation": "Se verificaron variantes reproducibles de lentitud y fallo, ademas de sanitizacion previa de eventos tecnicos."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "observedResult": "28 pruebas pasaron, incluyendo contrato publico, cliente y fallas de gateway.",
+      "explanation": "Implemento el cliente HTTP gobernado por contrato y pruebas offline para success, nullable, malformed, timeout y server_error."
+    },
+    {
+      "studentId": "oma4r6464",
+      "commitShas": ["c73466b0057e1e8dba3d284dd18ce9f2590a85eb"],
+      "files": ["src/ui/CampusOpsScreen.tsx", "src/application/incidents/incidentGateway.ts", "src/infrastructure/incidents/cloudIncidentGateway.ts", "course-tests/week-05-gateway.test.tsx"],
+      "tests": ["course-tests/week-05-gateway.test.tsx"],
+      "reviews": ["src/api/courseIncidentClient.ts"],
+      "prediction": "La pantalla podra listar, detallar y crear incidencias sin llamar HTTP directamente.",
+      "command": "npm test -- --ci --runInBand course-tests/week-05-gateway.test.tsx",
+      "observedResult": "La suite de gateway/pantalla paso con creacion, reintento idempotente, null payload y error de lista.",
+      "explanation": "Conecto la UI a servicios/gateway, agregando adaptadores de infraestructura y pruebas de que no se usa HTTP desde la pantalla."
     },
     {
       "studentId": "3523110007",
-      "commitShas": ["adca2edee01cd3d07f51ce3f4660b94ebe67e6cf"],
-      "files": ["evidence/week-05/engineering.json", "reports/week-05/contract-tests.json"],
-      "tests": ["npm run typecheck", "npm run lint"],
-      "reviews": ["evidence/week-05/engineering.json"],
-      "prediction": "La evidencia final apuntara al SHA funcional y mantendra comandos reproducibles en fixtures locales.",
-      "command": "npm run typecheck; npm run lint",
-      "observedResult": "Typecheck y lint terminaron sin errores.",
-      "explanation": "Se consolido la evidencia tecnica y se alinearon los reportes con el commit verificado de Semana 05."
+      "commitShas": ["ad066f7148bf90961628bfdacc4b9434a1e2391c"],
+      "files": [".github/workflows/week-05-cliente-cloud-feedback.yml", "course-tests/week-05-gateway.test.tsx", "evidence/week-05/individual.json", "reports/week-05/contract-tests.json"],
+      "tests": ["npm run typecheck", "npm run lint", "python tools/course_public_evaluator.py --week 5 --mode verify"],
+      "reviews": ["pull requests #19, #20 y #21", "evidence/week-05/engineering.json"],
+      "prediction": "La integracion final conservara PRs de Semana 05, checks anteriores y evidencia reproducible con SHA alineado.",
+      "command": "npm run typecheck; npm run lint; python tools/course_public_evaluator.py --week 5 --mode verify",
+      "observedResult": "Typecheck, lint y verify-week-05 terminaron sin errores antes del commit final de evidencias.",
+      "explanation": "Samuel Jonathan Trujillo Bolanos, GitHub KIRA21M, integro los PRs, resolvio conflictos, agrego el workflow de Semana 05 y preparo el cierre con tag/SHA."
     }
   ]
 }

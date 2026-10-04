@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "adca2edee01cd3d07f51ce3f4660b94ebe67e6cf",
-  "generatedAt": "2026-10-03T14:53:08-06:00",
+  "commitSha": "ad066f7148bf90961628bfdacc4b9434a1e2391c",
+  "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
-    {"id": "malformed-envelope", "status": "pass", "scenarioType": "failure", "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts", "evidence": "Sobre con id vacio y DTO incompleto producen IncidentClientError kind=contract."},
-    {"id": "malformed-json", "status": "pass", "scenarioType": "failure", "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts", "evidence": "JSON no parseable produce kind=contract sin excepcion sin controlar."},
-    {"id": "slow-timeout", "status": "pass", "scenarioType": "failure", "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts", "evidence": "AbortController produce kind=timeout de forma distinguible."},
-    {"id": "server-error", "status": "pass", "scenarioType": "failure", "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts", "evidence": "HTTP 500 produce kind=server y conserva status 500."},
-    {"id": "sanitized-telemetry", "status": "pass", "scenarioType": "boundary", "command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/week-05-client.test.ts", "evidence": "La telemetria solo contiene kind, status y attempt; no contiene synthetic-token."},
+    {"id": "malformed-envelope", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "Sobre con id vacio, version invalida o DTO incompleto produce error contract/malformed sin llegar al dominio."},
+    {"id": "malformed-json", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "JSON no parseable produce kind=contract sin excepcion sin controlar."},
+    {"id": "slow-timeout", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "AbortController produce timeout distinguible y la pantalla muestra mensaje publico."},
+    {"id": "server-error", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "HTTP 500 produce server_error y el reintento conserva la misma clave de operacion para no duplicar."},
+    {"id": "sanitized-telemetry", "status": "pass", "scenarioType": "boundary", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "Los resultados serializados no contienen token sintetico, ubicacion sensible ni comentario interno del upstream."},
     {"id": "local-backend-variants", "status": "pass", "scenarioType": "failure", "command": "npm run backend:self-test", "evidence": "Controlled backend self-test paso usando fixtures locales y sin Internet publico."}
   ]
 }

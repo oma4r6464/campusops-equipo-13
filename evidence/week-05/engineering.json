@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "adca2edee01cd3d07f51ce3f4660b94ebe67e6cf",
-  "decision": "Separar el cliente HTTP de la interfaz y conservar el DTO remoto hasta que pase parseRemoteResource. La capa de cliente clasifica contract, timeout, server y network, conserva payload null y solo entrega a la aplicacion datos validados.",
+  "commitSha": "ad066f7148bf90961628bfdacc4b9434a1e2391c",
+  "decision": "Separar el cliente HTTP de la interfaz, conservar el DTO remoto hasta que pase parseRemoteResource y mapearlo a dominio solo en el gateway/casos de uso. La capa de cliente clasifica contract, timeout, server y network; conserva payload null como limite valido y solo entrega a la aplicacion datos validados.",
   "alternatives": [
     "Hacer fetch directamente en CampusOpsScreen, descartado porque mezcla transporte, estados visuales y validacion de contrato.",
     "Convertir null en un incidente vacio, descartado porque inventa datos y confunde un limite valido con una respuesta incompleta.",
@@ -13,7 +13,7 @@
   "verification": [
     {"command": "npm run typecheck", "result": "pass", "evidence": "tsc --noEmit termino sin errores."},
     {"command": "npm run lint", "result": "pass", "evidence": "ESLint termino sin errores."},
-    {"command": "node node_modules/jest/bin/jest.js --no-watchman --ci --runInBand --runTestsByPath course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts", "result": "pass", "evidence": "14 pruebas pasaron: 5 publicas y 9 del cliente."},
+    {"command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "result": "pass", "evidence": "28 pruebas pasaron: publicas, cliente, gateway, pantalla y casos de uso."},
     {"command": "npm run backend:self-test", "result": "pass", "evidence": "Las variantes del backend didactico pasaron sin Internet publico."}
   ]
 }
