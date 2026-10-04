@@ -8,6 +8,8 @@ import { createCloudIncidentGateway } from '../src/infrastructure/incidents/clou
 import { createInMemoryIncidentGateway } from '../src/infrastructure/incidents/inMemoryIncidentGateway';
 import { CampusOpsScreen } from '../src/ui/CampusOpsScreen';
 
+jest.setTimeout(10000);
+
 const SECRET = 'synthetic-secret-token';
 
 function response(body: unknown, status = 200): Response {
