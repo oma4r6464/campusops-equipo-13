@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "week": 5,
+  "commitSha": "bfb777eba78c4bead92f3dafb80bcdba72d1b0bd",
+  "decision": "Separar estrictamente el DTO de red (el sobre remoto), el modelo de dominio interno de CampusOps y la representación tipada de errores. Esta decisión asegura que un payload malformado o un nulo válido se analice en el límite de la red mediante `parseRemoteResource`, aislando a la interfaz de usuario de los detalles de transporte y variantes de error del simulador.",
+  "alternatives": [
+    "Usar el DTO de red directamente en toda la UI y vistas. Fue descartado porque cualquier cambio en el backend obligaría a reescribir los componentes visuales y no los protegería estructuralmente contra respuestas con payload nulo o datos ausentes.",
+    "Lanzar excepciones HTTP genéricas (brutas) a la interfaz. Fue descartado porque fuerza a la vista a entender códigos de estado técnicos (500, 429) en lugar de consumir errores de dominio que permitan flujos amigables."
+  ],
+  "tradeoff": "Esta arquitectura defensiva requiere crear adaptadores y múltiples definiciones de tipos (boilerplate), aumentando el trabajo de mantenimiento por cada endpoint nuevo. A cambio, la resiliencia aumenta significativamente al lidiar con las variantes como `malformed`, `server_error` o `timeout` de manera segura.",
+  "requirementIds": [],
+  "verification": [
+    {
+      "command": "make public-test-week-05",
+      "result": "pending",
+      "evidence": "Ejecución pendiente tras la integración con los adaptadores de TypeScript."
+    }
+  ]
+}
