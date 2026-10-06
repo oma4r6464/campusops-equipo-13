@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 4,
-  "commitSha": "092c839c2aa5fc4dbec6807b7e404d846517374b",
+  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
   "decision": "Centralizar la sanitizacion en una funcion pura reutilizable, usar mensajes publicos genericos para fallos del backend y documentar SecureStore como mecanismo futuro para sesion. Esta entrega no persiste tokens ni datos sensibles y mantiene el backend local reproducible con origen CORS configurable.",
   "alternatives": [
     "Usar AsyncStorage para facilitar persistencia multiplataforma, descartado porque no ofrece proteccion suficiente para tokens.",
@@ -38,5 +38,6 @@
     }
   ]
 }
+
 
 

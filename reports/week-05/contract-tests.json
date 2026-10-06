@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "092c839c2aa5fc4dbec6807b7e404d846517374b",
+  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
   "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
     {"id": "remote-list", "status": "pass", "scenarioType": "nominal", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "La lista valida conserva el sobre remoto, valida DTO y se consume desde casos de uso sin HTTP directo en pantalla."},
@@ -11,4 +11,5 @@
     {"id": "published-parser", "status": "pass", "scenarioType": "boundary", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "28 pruebas pasaron: contrato publico, cliente, gateway, pantalla y casos de uso."}
   ]
 }
+
 

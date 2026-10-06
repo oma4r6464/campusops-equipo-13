@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "092c839c2aa5fc4dbec6807b7e404d846517374b",
+  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
   "decision": "Mantener el texto visible CampusOps como contrato estable de la pantalla y comprobarlo con el smoke test existente, porque una regresión mínima de presentación ya impide identificar correctamente la aplicación.",
   "alternatives": [
     "Cambiar el texto visible y actualizar la prueba para aceptar la nueva etiqueta.",
@@ -17,4 +17,5 @@
     }
   ]
 }
+
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "092c839c2aa5fc4dbec6807b7e404d846517374b",
+  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
   "decision": "Separar el cliente HTTP de la interfaz, conservar el DTO remoto hasta que pase parseRemoteResource y mapearlo a dominio solo en el gateway/casos de uso. La capa de cliente clasifica contract, timeout, server y network; conserva payload null como limite valido y solo entrega a la aplicacion datos validados.",
   "alternatives": [
     "Hacer fetch directamente en CampusOpsScreen, descartado porque mezcla transporte, estados visuales y validacion de contrato.",
@@ -17,4 +17,5 @@
     {"command": "npm run backend:self-test", "result": "pass", "evidence": "Las variantes del backend didactico pasaron sin Internet publico."}
   ]
 }
+
 
