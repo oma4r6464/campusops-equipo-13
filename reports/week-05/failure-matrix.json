@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "527c461728281cf4c9af36107a92eabc0d7e516e",
+  "commitSha": "092c839c2aa5fc4dbec6807b7e404d846517374b",
   "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
     {"id": "malformed-envelope", "status": "pass", "scenarioType": "failure", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "Sobre con id vacio, version invalida o DTO incompleto produce error contract/malformed sin llegar al dominio."},
@@ -12,3 +12,4 @@
     {"id": "local-backend-variants", "status": "pass", "scenarioType": "failure", "command": "npm run backend:self-test", "evidence": "Controlled backend self-test paso usando fixtures locales y sin Internet publico."}
   ]
 }
+
