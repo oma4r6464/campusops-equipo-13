@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "commitSha": "0123c98340ea89853f0d1bf714820fa06a44b6a5",
+  "generatedAt": "2026-10-05T00:00:00-06:00",
+  "checks": [
+    {
+      "id": "auth-state-machine-documented",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "test -f docs/session-state-machine.mmd && test -f session-flow.md",
+      "evidence": "El diagrama Mermaid y session-flow.md documentan login, sesion valida, 401, refresh compartido, logout y retorno a login."
+    },
+    {
+      "id": "concurrent-refresh-success",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "evidence": "Tres request401 concurrentes se agrupan en refreshCalls=1, se persiste course-token-1 y se reintentan a, b y c."
+    },
+    {
+      "id": "logout-clears-token",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "evidence": "El evento logout deja persistedToken=null y la sesion queda anonima."
+    },
+    {
+      "id": "refresh-failure-clears-session",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "coordinateRefresh([{type:'request401',requestId:'a',generation:0},{type:'refreshFailed',generation:0}])",
+      "evidence": "Una renovacion fallida limpia token persistido, generacion activa y cola de reintentos para evitar ciclos infinitos."
+    }
+  ]
+}

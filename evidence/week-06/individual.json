@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "ArmandoValerio",
+      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "files": ["docs/session-state-machine.mmd", "session-flow.md"],
+      "tests": ["npm test -- --ci --runInBand course-tests/public/week-06.test.ts"],
+      "reviews": ["issue #22"],
+      "prediction": "El diagrama debe coincidir con los estados reales de login, sesion valida, refresh compartido, fallo y logout.",
+      "command": "test -f docs/session-state-machine.mmd && test -f session-flow.md",
+      "observedResult": "Los dos archivos existen y documentan los caminos nominales y de error solicitados.",
+      "explanation": "Responsabilidad documentada para estados de sesion y flujo visible de la actividad individual."
+    },
+    {
+      "studentId": "oma4r6464",
+      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "files": ["docs/session-state-machine.mmd", "reports/week-06/auth-tests.json"],
+      "tests": ["npm run typecheck"],
+      "reviews": ["issue #23"],
+      "prediction": "Los perfiles reportante, tecnico y coordinador deben quedar separados de la UI como controles de autorizacion.",
+      "command": "npm run typecheck",
+      "observedResult": "TypeScript valido el contrato de coordinateRefresh y la evidencia de Semana 6 no agrego dependencias inseguras.",
+      "explanation": "Responsabilidad documentada para perfiles CampusOps y autorizacion de operaciones."
+    },
+    {
+      "studentId": "jesus-vegmed",
+      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "files": ["src/course-evaluation/index.ts", "reports/week-06/concurrency.json"],
+      "tests": ["course-tests/public/week-06.test.ts"],
+      "reviews": ["issue #24"],
+      "prediction": "Tres solicitudes 401 concurrentes deben compartir una sola renovacion y reintentarse una sola vez con el token nuevo.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "observedResult": "La suite publica paso con refreshCalls=1, retriedRequestIds a/b/c y persistedToken actualizado.",
+      "explanation": "Responsabilidad documentada para renovacion concurrente, limpieza en fallo y proteccion contra bucles."
+    },
+    {
+      "studentId": "3523110007",
+      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "files": [".github/workflows/week-06-sesion-segura-feedback.yml", "evidence/week-06/engineering.json", "evidence/week-06/individual.json"],
+      "tests": ["npm run lint", "python tools/course_public_evaluator.py --week 6 --mode public --execute-toolchain"],
+      "reviews": ["issue #25"],
+      "prediction": "La integracion final debe conservar checks anteriores, agregar el check de Semana 6 y dejar evidencia con SHA alineado.",
+      "command": "npm run lint",
+      "observedResult": "ESLint termino sin errores y el workflow de Semana 6 conserva permisos minimos y artefactos de evidencia.",
+      "explanation": "Samuel Jonathan Trujillo Bolanos, GitHub KIRA21M, matricula 3523110007, queda documentado para cierre, evidencias y trazabilidad final."
+    }
+  ]
+}
