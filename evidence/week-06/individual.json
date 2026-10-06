@@ -5,7 +5,7 @@
   "members": [
     {
       "studentId": "ArmandoValerio",
-      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
       "files": ["docs/session-state-machine.mmd", "session-flow.md"],
       "tests": ["npm test -- --ci --runInBand course-tests/public/week-06.test.ts"],
       "reviews": ["issue #22"],
@@ -16,7 +16,7 @@
     },
     {
       "studentId": "oma4r6464",
-      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
       "files": ["docs/session-state-machine.mmd", "reports/week-06/auth-tests.json"],
       "tests": ["npm run typecheck"],
       "reviews": ["issue #23"],
@@ -27,7 +27,7 @@
     },
     {
       "studentId": "jesus-vegmed",
-      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
       "files": ["src/course-evaluation/index.ts", "reports/week-06/concurrency.json"],
       "tests": ["course-tests/public/week-06.test.ts"],
       "reviews": ["issue #24"],
@@ -38,7 +38,7 @@
     },
     {
       "studentId": "3523110007",
-      "commitShas": ["0123c98340ea89853f0d1bf714820fa06a44b6a5"],
+      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
       "files": [".github/workflows/week-06-sesion-segura-feedback.yml", "evidence/week-06/engineering.json", "evidence/week-06/individual.json"],
       "tests": ["npm run lint", "python tools/course_public_evaluator.py --week 6 --mode public --execute-toolchain"],
       "reviews": ["issue #25"],
@@ -49,3 +49,4 @@
     }
   ]
 }
+
