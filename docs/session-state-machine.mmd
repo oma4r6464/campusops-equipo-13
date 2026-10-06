@@ -1,0 +1,32 @@
+stateDiagram-v2
+  [*] --> Anonymous
+
+  Anonymous --> Authenticating: login(actorId)
+  Authenticating --> Authenticated: credentials accepted / persist accessToken + refreshToken
+  Authenticating --> Anonymous: login rejected / keep session empty
+
+  Authenticated --> Requesting: request with accessToken
+  Requesting --> Authenticated: 2xx/3xx response
+  Requesting --> RefreshPending: 401 and no refresh in flight / start shared refresh
+  Requesting --> RefreshPending: 401 and refresh in flight / wait existing refresh
+
+  RefreshPending --> Authenticated: refresh succeeds / persist new accessToken and retry queued requests once
+  RefreshPending --> Anonymous: refresh fails, stale generation, or refresh returns 401 / clear tokens and user state
+
+  Authenticated --> Anonymous: logout / clear persisted tokens
+  RefreshPending --> Anonymous: logout while refresh pending / cancel local session and clear tokens
+
+  note right of Authenticated
+    CampusOps profiles:
+    reportante creates and views own incidents.
+    tecnico resolves assigned incidents.
+    coordinador closes or reopens incidents.
+    UI visibility never replaces authorization checks.
+  end note
+
+  note right of RefreshPending
+    coordinateRefresh uses single-flight behavior:
+    the first 401 starts refresh, concurrent 401 requests
+    share the same refresh, and every original request
+    is retried at most once with the new generation.
+  end note

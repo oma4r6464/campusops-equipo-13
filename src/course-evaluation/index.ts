@@ -29,7 +29,62 @@ export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
   retriedRequestIds: readonly string[];
   persistedToken: string | null;
 }> {
-  return pending('coordinateRefresh');
+  let status: 'anonymous' | 'authenticated' = 'anonymous';
+  let activeGeneration: number | null = null;
+  let persistedToken: string | null = null;
+  let refreshInFlight = false;
+  let refreshCalls = 0;
+  const pendingRequestIds: string[] = [];
+  const retriedRequestIds: string[] = [];
+
+  for (const event of _events) {
+    if (event.type === 'logout') {
+      status = 'anonymous';
+      activeGeneration = null;
+      persistedToken = null;
+      refreshInFlight = false;
+      pendingRequestIds.length = 0;
+      continue;
+    }
+
+    if (event.type === 'request401') {
+      if (event.requestId && !pendingRequestIds.includes(event.requestId)) {
+        pendingRequestIds.push(event.requestId);
+      }
+
+      if (!refreshInFlight) {
+        refreshInFlight = true;
+        refreshCalls += 1;
+      }
+      continue;
+    }
+
+    if (event.type === 'refreshSucceeded') {
+      status = 'authenticated';
+      activeGeneration = typeof event.generation === 'number' ? event.generation : activeGeneration;
+      persistedToken = event.token ?? persistedToken;
+      refreshInFlight = false;
+      retriedRequestIds.push(...pendingRequestIds);
+      pendingRequestIds.length = 0;
+      continue;
+    }
+
+    if (event.type === 'refreshFailed') {
+      status = 'anonymous';
+      activeGeneration = null;
+      persistedToken = null;
+      refreshInFlight = false;
+      pendingRequestIds.length = 0;
+    }
+  }
+
+  return {
+    status,
+    activeGeneration,
+    refreshCalls,
+    retriedRequestIds,
+    persistedToken,
+  };
 }
 
 export function resolveSync(
