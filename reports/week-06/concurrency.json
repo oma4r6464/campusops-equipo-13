@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
-  "generatedAt": "2026-10-05T00:00:00-06:00",
+  "commitSha": "PENDING_IMPLEMENTATION_COMMIT",
+  "generatedAt": "2026-10-11T11:31:40-06:00",
   "checks": [
     {
       "id": "single-flight-refresh",
@@ -24,9 +24,22 @@
       "scenarioType": "failure",
       "command": "session-flow.md evidence trace: REFRESH FAILED -> CLEAR accessToken -> CLEAR refreshToken -> NAVIGATE login",
       "evidence": "La evidencia controlada documenta el camino de error sin reintento infinito y con limpieza de tokens."
+    },
+    {
+      "id": "stale-refresh-after-logout",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "coordinateRefresh([request401:a, logout, refreshSucceeded:generation1])",
+      "evidence": "El refresh que termina después de logout se descarta; status=anonymous y persistedToken=null."
+    },
+    {
+      "id": "retry-once",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "coordinateRefresh([request401:a, refreshSucceeded:generation1, request401:a:attempt1])",
+      "evidence": "La solicitud a aparece una sola vez en retriedRequestIds y refreshCalls permanece en 1."
     }
   ]
 }
-
 
 

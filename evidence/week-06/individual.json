@@ -27,14 +27,14 @@
     },
     {
       "studentId": "jesus-vegmed",
-      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
-      "files": ["src/course-evaluation/index.ts", "reports/week-06/concurrency.json"],
-      "tests": ["course-tests/public/week-06.test.ts"],
+      "commitShas": ["PENDING_IMPLEMENTATION_COMMIT"],
+      "files": ["src/course-evaluation/index.ts", "src/course-evaluation/contracts.ts", "src/domain/session/sessionStateMachine.ts", "src/domain/session/sessionTypes.ts", "course-tests/week-06-session.test.ts", "reports/week-06/concurrency.json"],
+      "tests": ["npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts"],
       "reviews": ["issue #24"],
       "prediction": "Tres solicitudes 401 concurrentes deben compartir una sola renovacion y reintentarse una sola vez con el token nuevo.",
       "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
-      "observedResult": "La suite publica paso con refreshCalls=1, retriedRequestIds a/b/c y persistedToken actualizado.",
-      "explanation": "Responsabilidad documentada para renovacion concurrente, limpieza en fallo y proteccion contra bucles."
+      "observedResult": "La revisión estática confirma una renovación compartida, descarte de refresh obsoleto tras logout y límite de un reintento por solicitud. La ejecución quedó pendiente porque el entorno no tiene Node.js instalado.",
+      "explanation": "La primera respuesta 401 abre una sola renovación; las siguientes se agregan a la misma cola. Al terminar, cada solicitud se marca como reintentada y los 401 posteriores con attempt=1 se descartan. Logout incrementa la época de sesión, limpia el token y hace que cualquier resultado tardío sea obsoleto."
     },
     {
       "studentId": "3523110007",
@@ -49,6 +49,5 @@
     }
   ]
 }
-
 
 
