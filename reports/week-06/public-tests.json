@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 6,
   "mode": "public",
-  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
-  "evaluatedAt": "2026-10-06T00:29:29.286420+00:00",
+  "commitSha": "fbeae018962fee861e298c4f41e97785a1665c68",
+  "evaluatedAt": "2026-10-11T09:54:36.537729+00:00",
   "status": "pass",
   "checks": [
     {
@@ -39,7 +39,7 @@
     {
       "id": "schema:reports/week-06/auth-tests.json",
       "status": "pass",
-      "detail": "4 checks indexed, 3 boundary/failure; evidence-only commit; invalid changes=[]"
+      "detail": "7 checks indexed, 5 boundary/failure; report evaluates HEAD"
     },
     {
       "id": "schema:reports/week-06/concurrency.json",
@@ -58,4 +58,3 @@
     }
   ]
 }
-
