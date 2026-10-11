@@ -5,7 +5,7 @@
   "members": [
     {
       "studentId": "ArmandoValerio",
-      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
+      "commitShas": ["c682969d8182f14664f253663f110272991ad44c"],
       "files": [
         "docs/session-state-machine.mmd",
         "src/domain/session/sessionStateMachine.ts",
