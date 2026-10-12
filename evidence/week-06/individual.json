@@ -1,21 +1,52 @@
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "ArmandoValerio",
+      "commitShas": ["c682969d8182f14664f253663f110272991ad44c"],
+      "files": ["src/domain/session/sessionStateMachine.ts", "src/domain/session/sessionTypes.ts", "course-tests/week-06-session.test.ts"],
+      "tests": ["npm test -- --ci --runInBand course-tests/week-06-session.test.ts"],
+      "reviews": ["PR #26"],
+      "prediction": "La sesion debe distinguir autenticacion, expiracion, refresh y cierre con un reloj controlable.",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
+      "observedResult": "La suite de maquina de estados valida login, expiracion, refresh fallido, logout y reintentos.",
+      "explanation": "Registro de los cambios aportados por el PR #26; la atribucion se basa en el autor y commits visibles en GitHub."
+    },
     {
       "studentId": "oma4r6464",
       "commitShas": ["38f583e42132e1c1ce0601eaf6b13004149d23a0"],
-      "files": [
-        "src/domain/incidents/authorization.ts",
-        "src/application/session/session.ts",
-        "src/application/incidents/incidentOperations.ts",
-        "src/infrastructure/incidents/cloudIncidentActionGateway.ts",
-        "course-tests/week-06-authorization.test.ts",
-        "docs/authorization-matrix.md"
-      ],
-      "tests": [
-        "npm test -- --ci --runInBand course-tests/week-06-authorization.test.ts",
-        "npm test -- --ci --runInBand course-tests/week-06-gateway.test.ts"
-      ],
-      "reviews": ["issue #23"],
-      "prediction": "Las operaciones sensibles deben fallar aunque se invoquen sin pasar por la UI, y un rechazo no debe modificar la incidencia.",
+      "files": ["src/domain/incidents/authorization.ts", "src/application/incidents/incidentOperations.ts", "course-tests/week-06-authorization.test.ts", "docs/authorization-matrix.md"],
+      "tests": ["npm test -- --ci --runInBand course-tests/week-06-authorization.test.ts course-tests/week-06-gateway.test.ts"],
+      "reviews": ["PR #28"],
+      "prediction": "Las operaciones sensibles deben validar el perfil y la asignacion fuera de la UI.",
       "command": "npm test -- --ci --runInBand course-tests/week-06-authorization.test.ts",
-      "observedResult": "14 suites y 63 pruebas pasan. Contra el backend didactico, technician-2 (resolve no asignado) y reporter-1 (close) reciben 403 y la incidencia sigue en version 1 y status assigned; technician-1 y coordinator-1 obtienen 201 con versiones 2, 3 y 4.",
-      "explanation": "La autorizacion vive en dominio y aplicacion: el caso de uso valida perfil y asignacion con el actor de la sesion antes de llamar al gateway, y el backend vuelve a validar. Por eso ocultar botones no es el unico control."
+      "observedResult": "Las pruebas distinguen reportante, tecnico y coordinador y rechazan operaciones no autorizadas.",
+      "explanation": "Registro de los cambios aportados por el PR #28; la atribucion se basa en el autor y commits visibles en GitHub."
+    },
+    {
+      "studentId": "jesus-vegmed",
+      "commitShas": ["23f7ded94e5021d1f4ebd395573a3b54a60998fd"],
+      "files": ["src/course-evaluation/index.ts", "course-tests/week-06-session.test.ts", "reports/week-06/concurrency.json"],
+      "tests": ["npm test -- --ci --runInBand course-tests/public/week-06.test.ts"],
+      "reviews": ["PR #29"],
+      "prediction": "Tres respuestas 401 concurrentes deben compartir una sola renovacion y limitar los reintentos.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "observedResult": "La prueba publica valida refresh compartido y limpieza del estado persistido en logout.",
+      "explanation": "Registro de los cambios aportados por el PR #29; la atribucion se basa en el autor y commits visibles en GitHub."
+    },
+    {
+      "studentId": "3523110007",
+      "commitShas": ["67e2b7993eaba000b81b424351bc5bddeccaf9a8"],
+      "files": ["evidence/week-06/individual.json", "evidence/week-06/engineering.json", "reports/week-06/verify.json", "reports/week-06/public-tests.json"],
+      "tests": ["python tools/course_public_evaluator.py --week 6 --mode verify --execute-toolchain", "python tools/course_public_evaluator.py --week 6 --mode public"],
+      "reviews": ["issue #25"],
+      "prediction": "La integracion debe conservar las pruebas anteriores y dejar la evidencia con un esquema valido.",
+      "command": "python tools/course_public_evaluator.py --week 6 --mode verify --execute-toolchain",
+      "observedResult": "La verificacion tecnica pasa; la evidencia requiere alinearse al commit final de integracion.",
+      "explanation": "Samuel Jonathan Trujillo Bolanos, GitHub KIRA21M, matricula 3523110007; registro de cierre y trazabilidad de la integracion."
     }
+  ]
+}
+
