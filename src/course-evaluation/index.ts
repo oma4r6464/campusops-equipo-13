@@ -33,36 +33,60 @@ export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
   let activeGeneration: number | null = null;
   let persistedToken: string | null = null;
   let refreshInFlight = false;
+  let sessionEpoch = 0;
+  let refreshEpoch = -1;
   let refreshCalls = 0;
   const pendingRequestIds: string[] = [];
   const retriedRequestIds: string[] = [];
+  const seenRequestIds = new Set<string>();
 
   for (const event of _events) {
     if (event.type === 'logout') {
+      sessionEpoch += 1;
       status = 'anonymous';
       activeGeneration = null;
       persistedToken = null;
       refreshInFlight = false;
+      refreshEpoch = -1;
       pendingRequestIds.length = 0;
       continue;
     }
 
     if (event.type === 'request401') {
-      if (event.requestId && !pendingRequestIds.includes(event.requestId)) {
+      if (event.requestId && (seenRequestIds.has(event.requestId) || retriedRequestIds.includes(event.requestId))) {
+        continue;
+      }
+      if (event.attempt !== undefined && event.attempt >= 1) {
+        continue;
+      }
+      if (event.requestId) {
         pendingRequestIds.push(event.requestId);
+        seenRequestIds.add(event.requestId);
       }
 
       if (!refreshInFlight) {
         refreshInFlight = true;
+        refreshEpoch = sessionEpoch;
         refreshCalls += 1;
       }
       continue;
     }
 
     if (event.type === 'refreshSucceeded') {
+      if (!refreshInFlight || refreshEpoch !== sessionEpoch) {
+        continue;
+      }
+      if (
+        typeof event.generation !== 'number'
+        || (activeGeneration !== null && event.generation <= activeGeneration)
+      ) {
+        refreshInFlight = false;
+        pendingRequestIds.length = 0;
+        continue;
+      }
       status = 'authenticated';
-      activeGeneration = typeof event.generation === 'number' ? event.generation : activeGeneration;
-      persistedToken = event.token ?? persistedToken;
+      activeGeneration = event.generation;
+      persistedToken = event.token ?? null;
       refreshInFlight = false;
       retriedRequestIds.push(...pendingRequestIds);
       pendingRequestIds.length = 0;
@@ -70,6 +94,9 @@ export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
     }
 
     if (event.type === 'refreshFailed') {
+      if (!refreshInFlight || refreshEpoch !== sessionEpoch) {
+        continue;
+      }
       status = 'anonymous';
       activeGeneration = null;
       persistedToken = null;

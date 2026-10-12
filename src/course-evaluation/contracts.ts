@@ -9,6 +9,7 @@ export type AuthEvent = Readonly<{
   requestId?: string;
   generation?: number;
   token?: string;
+  attempt?: number;
 }>;
 
 export type SyncRecord = Readonly<{ id: string; version: number; fields: JsonObject }>;
