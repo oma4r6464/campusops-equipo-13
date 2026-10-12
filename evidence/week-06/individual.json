@@ -5,14 +5,22 @@
   "members": [
     {
       "studentId": "ArmandoValerio",
-      "commitShas": ["e19b733bb48df1e1b4aded545c30c3b8d53fb7c8"],
-      "files": ["docs/session-state-machine.mmd", "session-flow.md"],
-      "tests": ["npm test -- --ci --runInBand course-tests/public/week-06.test.ts"],
+      "commitShas": ["c682969d8182f14664f253663f110272991ad44c"],
+      "files": [
+        "docs/session-state-machine.mmd",
+        "src/domain/session/sessionStateMachine.ts",
+        "src/domain/session/sessionTypes.ts",
+        "course-tests/week-06-session.test.ts",
+        "reports/week-06/auth-tests.json"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts"
+      ],
       "reviews": ["issue #22"],
-      "prediction": "El diagrama debe coincidir con los estados reales de login, sesion valida, refresh compartido, fallo y logout.",
-      "command": "test -f docs/session-state-machine.mmd && test -f session-flow.md",
-      "observedResult": "Los dos archivos existen y documentan los caminos nominales y de error solicitados.",
-      "explanation": "Responsabilidad documentada para estados de sesion y flujo visible de la actividad individual."
+      "prediction": "El diagrama debe coincidir 1:1 con el ciclo de estados implementado: unauthenticated, logging_in, authenticated, expired, refreshing y transiciones seguras.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts",
+      "observedResult": "8 pruebas pasaron: login con expiracion determinista mediante reloj controlado, refresh single-flight, transicion segura en fallo y logout sin tokens.",
+      "explanation": "Implemento la maquina de estados de sesion con reloj controlable para pruebas deterministas y documento las transiciones reales en docs/session-state-machine.mmd."
     },
     {
       "studentId": "oma4r6464",

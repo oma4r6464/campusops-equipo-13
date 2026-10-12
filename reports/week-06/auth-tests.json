@@ -1,39 +1,57 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "271edf8748e7450910803b820a831a4c0291e4a7",
-  "generatedAt": "2026-10-05T00:00:00-06:00",
+  "commitSha": "c682969d8182f14664f253663f110272991ad44c",
+  "generatedAt": "2026-10-11T03:50:00-06:00",
   "checks": [
     {
       "id": "auth-state-machine-documented",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "test -f docs/session-state-machine.mmd && test -f session-flow.md",
-      "evidence": "El diagrama Mermaid y session-flow.md documentan login, sesion valida, 401, refresh compartido, logout y retorno a login."
+      "evidence": "El diagrama Mermaid y session-flow.md documentan exactamente los estados unauthenticated, logging_in, authenticated, expired, refreshing y transiciones seguras."
+    },
+    {
+      "id": "login-and-state-lifecycle",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
+      "evidence": "Login exitoso transiciona a logging_in y luego a authenticated guardando tokens, rol y expiracion calculada."
+    },
+    {
+      "id": "controlled-clock-expiration",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
+      "evidence": "La expiracion se verifica mediante reloj controlado inyectable de forma determinista sin retardos reales."
     },
     {
       "id": "concurrent-refresh-success",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
-      "evidence": "Tres request401 concurrentes se agrupan en refreshCalls=1, se persiste course-token-1 y se reintentan a, b y c."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts",
+      "evidence": "Multiples 401 concurrentes comparten una sola llamada de renovacion y reintentan cada peticion exactamente una vez."
     },
     {
-      "id": "logout-clears-token",
+      "id": "refresh-failure-safety",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
-      "evidence": "El evento logout deja persistedToken=null y la sesion queda anonima."
+      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
+      "evidence": "Al fallar el refresh, la maquina transiciona de inmediato a unauthenticated purgando todos los tokens y credenciales."
     },
     {
-      "id": "refresh-failure-clears-session",
+      "id": "logout-clears-session",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "coordinateRefresh([{type:'request401',requestId:'a',generation:0},{type:'refreshFailed',generation:0}])",
-      "evidence": "Una renovacion fallida limpia token persistido, generacion activa y cola de reintentos para evitar ciclos infinitos."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts",
+      "evidence": "El logout elimina completamente la sesion y garantiza que persistedToken y getSafeSnapshot() no expongan tokens."
+    },
+    {
+      "id": "tokens-redacted-telemetry",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
+      "evidence": "Los snapshots y serializaciones seguras no incluyen secretos ni tokens de autenticacion."
     }
   ]
 }
-
-
-
