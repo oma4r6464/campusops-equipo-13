@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 6,
   "mode": "public",
-  "commitSha": "67e2b7993eaba000b81b424351bc5bddeccaf9a8",
-  "evaluatedAt": "2026-10-12T01:14:18.035250+00:00",
+  "commitSha": "4700497d0a3afe07624d1d0ce0c66a3c0aa2e658",
+  "evaluatedAt": "2026-10-12T01:14:40.732909+00:00",
   "status": "pass",
   "checks": [
     {
@@ -39,17 +39,17 @@
     {
       "id": "schema:reports/week-06/auth-tests.json",
       "status": "pass",
-      "detail": "8 checks indexed, 6 boundary/failure; report evaluates HEAD"
+      "detail": "8 checks indexed, 6 boundary/failure; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:reports/week-06/concurrency.json",
       "status": "pass",
-      "detail": "3 checks indexed, 2 boundary/failure; report evaluates HEAD"
+      "detail": "3 checks indexed, 2 boundary/failure; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:evidence/week-06/engineering.json",
       "status": "pass",
-      "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
+      "detail": "decision evidence is substantive and reproducible; evidence-only commit; invalid changes=[]"
     },
     {
       "id": "schema:evidence/week-06/individual.json",
@@ -58,4 +58,3 @@
     }
   ]
 }
-
