@@ -27,6 +27,7 @@ type ClientOptions = Readonly<{
   baseUrl: string;
   actorId?: string;
   accessToken?: string;
+  credentials?: () => Readonly<{ actorId: string; accessToken: string }> | null;
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
   onTelemetry?: (event: unknown) => void;
@@ -36,6 +37,7 @@ type IncidentClient = Readonly<{
   list(): Promise<readonly RemoteIncident[]>;
   findById(id: string): Promise<RemoteIncident | null>;
   create(input: Readonly<{ category: string; description: string; location: string }>, idempotencyKey: string): Promise<RemoteIncident>;
+  perform(id: string, input: Readonly<Record<string, unknown>>, idempotencyKey: string): Promise<RemoteIncident>;
 }>;
 
 function isAbortError(error: unknown): boolean {
@@ -69,6 +71,9 @@ export function createCourseIncidentClient(options: ClientOptions): IncidentClie
   const timeoutMs = options.timeoutMs ?? 1000;
 
   async function request(path: string, init: RequestInit = {}): Promise<unknown> {
+    const identity = options.credentials
+    ? options.credentials()
+    : { actorId: options.actorId ?? '', accessToken: options.accessToken ?? '' };
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
@@ -77,8 +82,8 @@ export function createCourseIncidentClient(options: ClientOptions): IncidentClie
         signal: controller.signal,
         headers: {
           Accept: 'application/json',
-          Authorization: options.accessToken ? `Bearer ${options.accessToken}` : '',
-          'X-Course-Actor': options.actorId ?? '',
+          Authorization: identity?.accessToken ? `Bearer ${identity.accessToken}` : '',
+          'X-Course-Actor': identity?.actorId ?? '',
           ...(init.headers ?? {}),
         },
       });
@@ -117,5 +122,13 @@ export function createCourseIncidentClient(options: ClientOptions): IncidentClie
       headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyKey },
       body: JSON.stringify(input),
     })),
+    perform: async (id, input, idempotencyKey) => parseCreated(await request(
+      `/v1/incidents/${encodeURIComponent(id)}/actions`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyKey },
+        body: JSON.stringify(input),
+      },
+    )),
   };
 }

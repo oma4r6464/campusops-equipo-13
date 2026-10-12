@@ -1,57 +1,64 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "c682969d8182f14664f253663f110272991ad44c",
-  "generatedAt": "2026-10-11T03:50:00-06:00",
+  "commitSha": "38f583e42132e1c1ce0601eaf6b13004149d23a0",
+  "generatedAt": "2026-10-11T00:00:00-06:00",
   "checks": [
     {
       "id": "auth-state-machine-documented",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "test -f docs/session-state-machine.mmd && test -f session-flow.md",
-      "evidence": "El diagrama Mermaid y session-flow.md documentan exactamente los estados unauthenticated, logging_in, authenticated, expired, refreshing y transiciones seguras."
-    },
-    {
-      "id": "login-and-state-lifecycle",
-      "status": "pass",
-      "scenarioType": "nominal",
-      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
-      "evidence": "Login exitoso transiciona a logging_in y luego a authenticated guardando tokens, rol y expiracion calculada."
-    },
-    {
-      "id": "controlled-clock-expiration",
-      "status": "pass",
-      "scenarioType": "boundary",
-      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
-      "evidence": "La expiracion se verifica mediante reloj controlado inyectable de forma determinista sin retardos reales."
+      "evidence": "El diagrama Mermaid y session-flow.md documentan login, sesion valida, 401, refresh compartido, logout y retorno a login."
     },
     {
       "id": "concurrent-refresh-success",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts",
-      "evidence": "Multiples 401 concurrentes comparten una sola llamada de renovacion y reintentan cada peticion exactamente una vez."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "evidence": "Tres request401 concurrentes se agrupan en refreshCalls=1, se persiste course-token-1 y se reintentan a, b y c."
     },
     {
-      "id": "refresh-failure-safety",
+      "id": "logout-clears-token",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
-      "evidence": "Al fallar el refresh, la maquina transiciona de inmediato a unauthenticated purgando todos los tokens y credenciales."
+      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts",
+      "evidence": "El evento logout deja persistedToken=null y la sesion queda anonima."
     },
     {
-      "id": "logout-clears-session",
+      "id": "refresh-failure-clears-session",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/week-06-session.test.ts",
-      "evidence": "El logout elimina completamente la sesion y garantiza que persistedToken y getSafeSnapshot() no expongan tokens."
+      "command": "coordinateRefresh([{type:'request401',requestId:'a',generation:0},{type:'refreshFailed',generation:0}])",
+      "evidence": "Una renovacion fallida limpia token persistido, generacion activa y cola de reintentos para evitar ciclos infinitos."
     },
     {
-      "id": "tokens-redacted-telemetry",
+      "id": "profile-allowed-operations",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-authorization.test.ts",
+      "evidence": "Reportante crea, tecnico asignado resuelve y coordinador cierra y reabre con actores ficticios del backend didactico."
+    },
+    {
+      "id": "profile-denied-operations-do-not-mutate",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-06-authorization.test.ts",
+      "evidence": "Tecnico no asignado, reportante y tecnico sin permiso reciben forbidden distinguible; el gateway no se invoca y el estado de la incidencia queda igual."
+    },
+    {
+      "id": "server-403-controlled-error",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm test -- --ci --runInBand course-tests/week-06-session.test.ts",
-      "evidence": "Los snapshots y serializaciones seguras no incluyen secretos ni tokens de autenticacion."
+      "command": "npm test -- --ci --runInBand course-tests/week-06-gateway.test.ts",
+      "evidence": "403, 409 y 401 del backend se traducen a forbidden, conflict y unauthenticated sin exponer token, actor ni payload; logout deja de enviar credenciales."
+    },
+    {
+      "id": "backend-rejects-without-ui",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "curl -X POST http://127.0.0.1:4310/v1/incidents/campus-inc-001/actions -H \"X-Course-Actor: technician-2\" -d '{\"action\":\"resolve\",\"baseVersion\":1,\"diagnosis\":\"x\"}'",
+      "evidence": "El backend responde 403 forbidden a technician-2 (resolve no asignado) y a reporter-1 (close); un GET posterior mantiene version 1, status assigned e history vacio. Las acciones permitidas de technician-1 y coordinator-1 devuelven 201 con versiones 2, 3 y 4."
     }
   ]
 }
