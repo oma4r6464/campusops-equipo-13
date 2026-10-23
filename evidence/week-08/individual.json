@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "ArmandoValerio",
+      "commitShas": [
+        "e4070ad8fabb9ade112aa38b494f61d1e5248584",
+        "f88e5727b88acbcbf72d206fac6ac828b814e1f7",
+        "307be727e2cb941e8a40a1d34b7c04da220bcd16",
+        "5a266e391476a78161eb6e0fbe97aacb8e8dba4c",
+        "6857af6e7b1f799178b60ec5d46e4c9ff9f4209e"
+      ],
+      "files": [
+        "src/application/offline/localStore.ts",
+        "src/application/offline/offlineQueue.ts",
+        "src/domain/offline/types.ts",
+        "src/domain/offline/validation.ts",
+        "src/infrastructure/persistence/bootstrap.ts",
+        "src/infrastructure/persistence/expoSqliteDriver.ts",
+        "src/infrastructure/persistence/fileLocalStore.ts",
+        "src/infrastructure/persistence/fileSystem.ts",
+        "src/infrastructure/persistence/migrations/migrations.ts",
+        "src/infrastructure/persistence/migrations/runMigrations.ts",
+        "src/infrastructure/persistence/nodeFileSystem.ts",
+        "src/infrastructure/persistence/nodeSqliteDriver.ts",
+        "src/infrastructure/persistence/sqlDriver.ts",
+        "src/infrastructure/persistence/sqliteLocalStore.ts",
+        "course-tests/week-08-persistence.test.ts",
+        "tools/week08_evidence.mjs",
+        "docs/data-model.md",
+        "reports/week-08/migration-tests.json"
+      ],
+      "tests": [
+        "course-tests/week-08-persistence.test.ts"
+      ],
+      "reviews": [],
+      "prediction": "La persistencia local conservara incidencias y operaciones offline tras reiniciar, y las migraciones fallidas dejaran intactos el esquema y los datos.",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
+      "observedResult": "La ejecucion observada termino con 1 suite aprobada y 8 de 8 pruebas pasadas. Incluyo reinicio conservando operationId, incidentId, baseVersion, authorId, notes y photoRefs; migracion v1 a v2 preservando filas; y rollback completo ante fallos inyectados y SQL invalido.",
+      "explanation": "Registro basado en los commits de Semana 08 atribuidos a ArmandoValerio en el historial Git y en la ejecucion observada de la suite de persistencia."
+    }
+  ],
+  "pendingContributors": {
+    "count": 3,
+    "status": "pending",
+    "requiredInformation": [
+      "studentId",
+      "commitShas",
+      "files",
+      "tests or reviews",
+      "prediction",
+      "command",
+      "observedResult",
+      "explanation"
+    ],
+    "note": "No se agregaron registros ni atribuciones de otros integrantes porque sus datos verificables siguen pendientes. Este borrador no satisface todavía el validador que exige exactamente cuatro miembros."
+  }
+}
