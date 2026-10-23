@@ -1,64 +1,64 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "f88e5727b88acbcbf72d206fac6ac828b814e1f7",
-  "generatedAt": "2026-10-23T17:04:04.550Z",
+  "commitSha": "5a266e391476a78161eb6e0fbe97aacb8e8dba4c",
+  "generatedAt": "2026-10-23T17:07:55.177Z",
   "checks": [
     {
       "id": "queue-survives-restart",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Tras cerrar y reabrir la base SQLite en disco, la cola conserva orden FIFO y op-demo-0001 mantiene incidentId=fake-inc-001, baseVersion=3, authorId=tech-demo-01, notes y photoRefs [fake-0001.jpg, fake-0002.jpg]; la segunda apertura aplica 0 migraciones. (37 ms)"
+      "evidence": "Tras cerrar y reabrir la base SQLite en disco, la cola conserva orden FIFO y op-demo-0001 mantiene incidentId=fake-inc-001, baseVersion=3, authorId=tech-demo-01, notes y photoRefs [fake-0001.jpg, fake-0002.jpg]; la segunda apertura aplica 0 migraciones. (33 ms)"
     },
     {
       "id": "syncing-recovers-after-restart",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Una operacion marcada syncing antes del cierre se hidrata como pending con el mismo operationId para reintento idempotente. (30 ms)"
+      "evidence": "Una operacion marcada syncing antes del cierre se hidrata como pending con el mismo operationId para reintento idempotente. (33 ms)"
     },
     {
       "id": "duplicate-operation-no-partial-state",
       "status": "pass",
       "scenarioType": "failure",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "El segundo enqueue con op-demo-fixed lanza DuplicateOperationError; la cola sigue con 1 registro y notes=\"uno\". (22 ms)"
+      "evidence": "El segundo enqueue con op-demo-fixed lanza DuplicateOperationError; la cola sigue con 1 registro y notes=\"uno\". (25 ms)"
     },
     {
       "id": "migration-v1-to-v2-preserves-data",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Base v1 con 2 operaciones (columna note) migra a v2: applied=[v2-notes-and-photo-refs], user_version=2, ambas filas conservan operationId, baseVersion=3, authorId y notes; photoRefs=[]; luego acepta photoRefs nuevos (3 filas). (40 ms)"
+      "evidence": "Base v1 con 2 operaciones (columna note) migra a v2: applied=[v2-notes-and-photo-refs], user_version=2, ambas filas conservan operationId, baseVersion=3, authorId y notes; photoRefs=[]; luego acepta photoRefs nuevos (3 filas). (43 ms)"
     },
     {
       "id": "migration-idempotent",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "runMigrations sobre una base ya en v2 devuelve {from:2,to:2,applied:[]}. (18 ms)"
+      "evidence": "runMigrations sobre una base ya en v2 devuelve {from:2,to:2,applied:[]}. (17 ms)"
     },
     {
       "id": "migration-refuses-downgrade",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Con user_version=99 el arranque lanza MigrationError y el volcado logico de la base queda identico. (28 ms)"
+      "evidence": "Con user_version=99 el arranque lanza MigrationError y el volcado logico de la base queda identico. (37 ms)"
     },
     {
       "id": "migration-injected-failure-rollback",
       "status": "pass",
       "scenarioType": "failure",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Falla inyectada tras ejecutar v2 y antes del COMMIT: MigrationError{fromVersion:1,failedVersion:2}; esquema, user_version=1 y filas identicos al volcado previo (sigue columna note, sin photo_refs). Un arranque posterior migra 1->2 conservando las 2 operaciones. (45 ms)"
+      "evidence": "Falla inyectada tras ejecutar v2 y antes del COMMIT: MigrationError{fromVersion:1,failedVersion:2}; esquema, user_version=1 y filas identicos al volcado previo (sigue columna note, sin photo_refs). Un arranque posterior migra 1->2 conservando las 2 operaciones. (54 ms)"
     },
     {
       "id": "migration-broken-sql-rollback",
       "status": "pass",
       "scenarioType": "failure",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "evidence": "Migracion v2 que renombra columna y agrega photo_refs y luego ejecuta SQL invalido: MigrationError failedVersion=2 y el volcado logico es identico al previo (DDL revertido). (28 ms)"
+      "evidence": "Migracion v2 que renombra columna y agrega photo_refs y luego ejecuta SQL invalido: MigrationError failedVersion=2 y el volcado logico es identico al previo (DDL revertido). (29 ms)"
     }
   ]
 }
