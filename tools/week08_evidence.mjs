@@ -51,7 +51,7 @@ const OBSERVED = {
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 
 function assertCleanTree() {
-  const dirty = git('status', '--porcelain')
+  const dirty = execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' })
     .split('\n')
     .filter(Boolean)
     .map((line) => line.slice(3))
