@@ -9,6 +9,8 @@ import type {
 import type { IncidentLocation } from '../campusops/contracts';
 import { parseRemoteEnvelope } from '../api/remoteResource';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
+import { deduplicateOperations as deduplicateByOperationId } from '../domain/sync/deduplicateOperations';
+import { resolveSync as resolveSyncRecords } from '../domain/sync/resolveSync';
 
 function pending(name: string): never {
   throw new Error(`${name} must be implemented in the assigned week`);
@@ -115,19 +117,18 @@ export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
 }
 
 export function resolveSync(
-  _base: SyncRecord,
-  _local: SyncRecord,
-  _remote: SyncRecord,
+  base: SyncRecord,
+  local: SyncRecord,
+  remote: SyncRecord,
 ): Readonly<{ kind: 'merged'; fields: JsonObject } | { kind: 'conflict'; fields: readonly string[] }> {
-  return pending('resolveSync');
+  return resolveSyncRecords(base, local, remote);
 }
 
 export function deduplicateOperations<T extends Readonly<{ operationId: string }>>(
-  _operations: readonly T[],
+  operations: readonly T[],
 ): readonly T[] {
-  return pending('deduplicateOperations');
+  return deduplicateByOperationId(operations);
 }
-
 export function planRetry(_input: Readonly<{
   method: 'GET' | 'POST';
   status: number | 'timeout';

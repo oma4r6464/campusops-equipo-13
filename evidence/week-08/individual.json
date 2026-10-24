@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "oma4r6464",
+      "commitShas": ["PENDIENTE"],
+      "files": [
+        "src/domain/sync/resolveSync.ts",
+        "src/domain/sync/deduplicateOperations.ts",
+        "src/application/sync/syncPendingOperations.ts",
+        "src/application/sync/incidentSyncRecord.ts",
+        "src/application/campusOpsServices.ts",
+        "src/course-evaluation/index.ts",
+        "course-tests/week-08-sync.test.ts",
+        "docs/sync-policy.md",
+        "tools/week08_sync_evidence.mjs",
+        "reports/week-08/migration-tests.json"
+      ],
+      "tests": [
+        "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts course-tests/public/week-08.test.ts"
+      ],
+      "reviews": [],
+      "prediction": "Una reasignacion remota no sera reemplazada por una asignacion local antigua, los cambios independientes se combinaran, el mismo operationId no duplicara el efecto y la cola solo retirara operaciones confirmadas.",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts course-tests/public/week-08.test.ts",
+      "observedResult": "Pasaron 2 suites y 26 de 26 pruebas: combinacion de cambios independientes, conflicto en work, deduplicacion por operationId, no mutacion de entradas y cola que conserva las operaciones con conflicto o sin confirmar. Typecheck, lint y architecture:check pasaron.",
+      "explanation": "Implemente resolveSync y deduplicateOperations en el dominio, el caso de uso de sincronizacion con puertos y su conexion al adaptador de aplicacion, mas la politica en docs/sync-policy.md."
+    }
+  ]
+}
