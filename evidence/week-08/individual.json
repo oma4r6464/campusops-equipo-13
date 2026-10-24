@@ -5,7 +5,7 @@
   "members": [
     {
       "studentId": "oma4r6464",
-      "commitShas": ["PENDIENTE"],
+      "commitShas": ["7f1c46a0c68cb90e5d7971a88e04f31586d00051"],
       "files": [
         "src/domain/sync/resolveSync.ts",
         "src/domain/sync/deduplicateOperations.ts",

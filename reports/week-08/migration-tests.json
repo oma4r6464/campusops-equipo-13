@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "ac8457f5441d1bcf22cc2d5fbdadb3f2aeec0a5b",
-  "generatedAt": "2026-10-24T21:35:35.752Z",
+  "commitSha": "7f1c46a0c68cb90e5d7971a88e04f31586d00051",
+  "generatedAt": "2026-10-24T21:41:01.814Z",
   "checks": [
     {
       "id": "sync-merges-independent-changes",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts",
-      "evidence": "Aprobadas 2 de 2 pruebas: \"combina cambios independientes de campos distintos\" (3 ms); \"combina campos agregados por cada lado\" (1 ms)."
+      "evidence": "Aprobadas 2 de 2 pruebas: \"combina cambios independientes de campos distintos\" (4 ms); \"combina campos agregados por cada lado\" (1 ms)."
     },
     {
       "id": "sync-remote-reassignment-preserved",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts",
-      "evidence": "Aprobadas 2 de 2 pruebas: \"la reasignacion remota no es reemplazada por una asignacion local antigua\" (1 ms); \"la reasignacion remota llega al servidor sin ser reemplazada\" (1 ms)."
+      "evidence": "Aprobadas 2 de 2 pruebas: \"la reasignacion remota no es reemplazada por una asignacion local antigua\" (1 ms); \"la reasignacion remota llega al servidor sin ser reemplazada\" (2 ms)."
     },
     {
       "id": "sync-work-conflict-detected",
       "status": "pass",
       "scenarioType": "failure",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts",
-      "evidence": "Aprobadas 2 de 2 pruebas: \"detecta conflicto cuando work cambia local y remotamente\" (1 ms); \"informa todos los campos en conflicto\" (0 ms)."
+      "evidence": "Aprobadas 2 de 2 pruebas: \"detecta conflicto cuando work cambia local y remotamente\" (0 ms); \"informa todos los campos en conflicto\" (0 ms)."
     },
     {
       "id": "sync-conflict-keeps-pending-operation",
@@ -44,14 +44,14 @@
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts",
-      "evidence": "Aprobadas 3 de 3 pruebas: \"conserva la primera aparicion de cada operationId y el orden\" (0 ms); \"los duplicados de la cola se envian una sola vez\" (1 ms); \"el reintento tras un fallo al limpiar la cola no duplica el efecto\" (1 ms)."
+      "evidence": "Aprobadas 3 de 3 pruebas: \"conserva la primera aparicion de cada operationId y el orden\" (0 ms); \"los duplicados de la cola se envian una sola vez\" (1 ms); \"el reintento tras un fallo al limpiar la cola no duplica el efecto\" (2 ms)."
     },
     {
       "id": "sync-inputs-not-mutated",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-sync.test.ts",
-      "evidence": "Aprobadas 2 de 2 pruebas: \"no muta base, local ni remote y el resultado no comparte referencias\" (1 ms); \"no muta la entrada ni devuelve la misma lista\" (0 ms)."
+      "evidence": "Aprobadas 2 de 2 pruebas: \"no muta base, local ni remote y el resultado no comparte referencias\" (2 ms); \"no muta la entrada ni devuelve la misma lista\" (0 ms)."
     }
   ]
 }
