@@ -65,14 +65,33 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     if reported_sha == head_sha:
         return True, "report evaluates HEAD"
     ok, parent = run(repo, ["git", "rev-parse", "HEAD^"], 20)
-    if not ok or reported_sha != parent.strip():
-        return False, "commitSha must be HEAD or its direct evidence-only parent"
-    ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{head_sha}"], 20)
-    if not ok:
-        return False, "could not inspect evidence commit"
-    paths = [line for line in changed.splitlines() if line]
-    invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
-    return (not invalid, f"evidence-only commit; invalid changes={invalid}")
+    if ok and reported_sha == parent.strip():
+        ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{head_sha}"], 20)
+        if not ok:
+            return False, "could not inspect evidence commit"
+        paths = [line for line in changed.splitlines() if line]
+        invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
+        return (not invalid, f"evidence-only commit; invalid changes={invalid}")
+
+    # GitHub evaluates pull requests on a synthetic merge commit. In that
+    # checkout the student's head is HEAD^2, so an evidence-only commit can
+    # legitimately be the direct parent of that second parent. Keep the same
+    # evidence-only guard while supporting both local and PR checkouts.
+    ok, pr_head = run(repo, ["git", "rev-parse", "HEAD^2"], 20)
+    if ok:
+        pr_head = pr_head.strip()
+        if reported_sha == pr_head:
+            return True, "report evaluates the pull request head"
+        ok, pr_parent = run(repo, ["git", "rev-parse", f"{pr_head}^"], 20)
+        if ok and reported_sha == pr_parent.strip():
+            ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{pr_head}"], 20)
+            if not ok:
+                return False, "could not inspect evidence commit"
+            paths = [line for line in changed.splitlines() if line]
+            invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
+            return (not invalid, f"pull request evidence-only parent; invalid changes={invalid}")
+
+    return False, "commitSha must be HEAD or its direct evidence-only parent"
 
 
 def validate_report(repo: Path, path: Path, week: int, sha: str) -> tuple[bool, str]:
