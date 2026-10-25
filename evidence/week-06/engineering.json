@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "25e0cf624bcdfe7c7e1f8def307d480f0658786a",
+  "commitSha": "85ab354f39589e635c51a09f0e043b9ddf8e640f",
   "decision": "Implementar la renovacion de sesion como single-flight: una sola renovacion queda activa cuando varias solicitudes reciben 401, las solicitudes concurrentes esperan el mismo resultado y logout o refresh fallido limpian el estado persistido.",
   "alternatives": [
     "Ejecutar un refresh por cada 401, descartado porque produce multiples tokens, condiciones de carrera y carga innecesaria al backend.",
