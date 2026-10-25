@@ -114,18 +114,69 @@ export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
   };
 }
 
+function canonicalJson(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalJson);
+  }
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, item]) => [key, canonicalJson(item)]),
+    );
+  }
+  return value;
+}
+
+function jsonEqual(left: unknown, right: unknown): boolean {
+  return JSON.stringify(canonicalJson(left)) === JSON.stringify(canonicalJson(right));
+}
+
 export function resolveSync(
-  _base: SyncRecord,
-  _local: SyncRecord,
-  _remote: SyncRecord,
+  base: SyncRecord,
+  local: SyncRecord,
+  remote: SyncRecord,
 ): Readonly<{ kind: 'merged'; fields: JsonObject } | { kind: 'conflict'; fields: readonly string[] }> {
-  return pending('resolveSync');
+  const keys = new Set([...Object.keys(base.fields), ...Object.keys(local.fields), ...Object.keys(remote.fields)]);
+  const conflicts: string[] = [];
+  const merged: Record<string, unknown> = {};
+
+  for (const key of keys) {
+    const baseValue = base.fields[key];
+    const localValue = local.fields[key];
+    const remoteValue = remote.fields[key];
+    const localChanged = !jsonEqual(localValue, baseValue);
+    const remoteChanged = !jsonEqual(remoteValue, baseValue);
+
+    if (localChanged && remoteChanged && !jsonEqual(localValue, remoteValue)) {
+      conflicts.push(key);
+      continue;
+    }
+
+    merged[key] = localChanged ? localValue : remoteValue;
+  }
+
+  if (conflicts.length > 0) {
+    return { kind: 'conflict', fields: conflicts.sort() };
+  }
+
+  return { kind: 'merged', fields: merged };
 }
 
 export function deduplicateOperations<T extends Readonly<{ operationId: string }>>(
-  _operations: readonly T[],
+  operations: readonly T[],
 ): readonly T[] {
-  return pending('deduplicateOperations');
+  const seen = new Set<string>();
+  const result: T[] = [];
+
+  for (const operation of operations) {
+    if (!seen.has(operation.operationId)) {
+      seen.add(operation.operationId);
+      result.push(operation);
+    }
+  }
+
+  return result;
 }
 
 export function planRetry(_input: Readonly<{
