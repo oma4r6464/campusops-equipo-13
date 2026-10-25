@@ -77,9 +77,14 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     # checkout the student's head is HEAD^2, so an evidence-only commit can
     # legitimately be the direct parent of that second parent. Keep the same
     # evidence-only guard while supporting both local and PR checkouts.
+    pr_heads: list[str] = []
+    github_head = os.environ.get("GITHUB_HEAD_SHA", "")
+    if re.fullmatch(r"[0-9a-f]{40}", github_head):
+        pr_heads.append(github_head)
     ok, pr_head = run(repo, ["git", "rev-parse", "HEAD^2"], 20)
-    if ok:
-        pr_head = pr_head.strip()
+    if ok and pr_head.strip() not in pr_heads:
+        pr_heads.append(pr_head.strip())
+    for pr_head in pr_heads:
         if reported_sha == pr_head:
             return True, "report evaluates the pull request head"
         ok, pr_parent = run(repo, ["git", "rev-parse", f"{pr_head}^"], 20)
