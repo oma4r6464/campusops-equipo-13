@@ -81,6 +81,15 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     github_head = os.environ.get("GITHUB_HEAD_SHA", "")
     if re.fullmatch(r"[0-9a-f]{40}", github_head):
         pr_heads.append(github_head)
+    event_path = os.environ.get("GITHUB_EVENT_PATH", "")
+    if event_path:
+        try:
+            event = json.loads(Path(event_path).read_text(encoding="utf-8"))
+            event_head = event.get("pull_request", {}).get("head", {}).get("sha", "")
+            if re.fullmatch(r"[0-9a-f]{40}", event_head) and event_head not in pr_heads:
+                pr_heads.append(event_head)
+        except (OSError, json.JSONDecodeError, AttributeError):
+            pass
     ok, pr_head = run(repo, ["git", "rev-parse", "HEAD^2"], 20)
     if ok and pr_head.strip() not in pr_heads:
         pr_heads.append(pr_head.strip())
