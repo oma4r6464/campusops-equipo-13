@@ -18,6 +18,7 @@
       "tests": [
         "course-tests/week-08-persistence.test.ts"
       ],
+      "reviews": [],
       "prediction": "La cola SQLite conservara operationId, version base, autor y contenido despues de reiniciar, y una migracion fallida dejara intactos el esquema y las filas.",
       "command": "npm test -- --ci --runInBand course-tests/week-08-persistence.test.ts",
       "observedResult": "La suite de persistencia paso sus 8 pruebas con reinicio, migracion v1-v2 e inyecciones de rollback.",
@@ -36,6 +37,7 @@
       "tests": [
         "course-tests/public/week-08.test.ts"
       ],
+      "reviews": [],
       "prediction": "Los cambios independientes deben combinarse y una reasignacion remota concurrente debe declararse conflicto sin sobrescribir registros.",
       "command": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts",
       "observedResult": "La suite publica valida conflicto de work, combinacion de campos independientes y deduplicacion por operationId.",
@@ -58,6 +60,7 @@
         "npm run typecheck",
         "npm run lint"
       ],
+      "reviews": [],
       "prediction": "La implementacion debe comparar contenido JSON, ordenar los campos en conflicto, conservar la primera operacion repetida y generar evidencia con el SHA real.",
       "command": "npm run evidence:week08",
       "observedResult": "Las 2 suites y 11 pruebas pasaron; el reporte quedo generado con commitSha f4318b1b6827b9cf441d3444b9f360dbbede0324 y 11 checks en pass.",
