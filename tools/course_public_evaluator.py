@@ -93,7 +93,13 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     ok, pr_head = run(repo, ["git", "rev-parse", "HEAD^2"], 20)
     if ok and pr_head.strip() not in pr_heads:
         pr_heads.append(pr_head.strip())
-    for pr_head in pr_heads:
+    expanded_heads = list(pr_heads)
+    for candidate in pr_heads:
+        run(repo, ["git", "fetch", "--no-tags", "--depth=2", "origin", candidate], 30)
+        ok, second_parent = run(repo, ["git", "rev-parse", f"{candidate}^2"], 20)
+        if ok and second_parent.strip() not in expanded_heads:
+            expanded_heads.append(second_parent.strip())
+    for pr_head in expanded_heads:
         if reported_sha == pr_head:
             return True, "report evaluates the pull request head"
         # The academic workflow intentionally uses a shallow checkout. Fetch

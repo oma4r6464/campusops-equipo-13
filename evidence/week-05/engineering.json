@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
+  "commitSha": "43d49eb7082015b211673f6d6f146a732dc58691",
   "decision": "Separar el cliente HTTP de la interfaz, conservar el DTO remoto hasta que pase parseRemoteResource y mapearlo a dominio solo en el gateway/casos de uso. La capa de cliente clasifica contract, timeout, server y network; conserva payload null como limite valido y solo entrega a la aplicacion datos validados.",
   "alternatives": [
     "Hacer fetch directamente en CampusOpsScreen, descartado porque mezcla transporte, estados visuales y validacion de contrato.",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
+  "commitSha": "43d49eb7082015b211673f6d6f146a732dc58691",
   "decision": "Usar SQLite como almacenamiento local principal para incidencias y operaciones offline, con operationId estable, version base, autor y contenido. Ejecutar migraciones versionadas en una transaccion y conservar la cola hasta recibir confirmacion del servidor.",
   "alternatives": [
     "Guardar la cola solo en memoria, descartado porque se perderia al reiniciar.",
