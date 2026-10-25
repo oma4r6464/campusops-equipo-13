@@ -6,55 +6,62 @@
     {
       "studentId": "ArmandoValerio",
       "commitShas": [
-        "e4070ad8fabb9ade112aa38b494f61d1e5248584",
-        "f88e5727b88acbcbf72d206fac6ac828b814e1f7",
-        "307be727e2cb941e8a40a1d34b7c04da220bcd16",
-        "5a266e391476a78161eb6e0fbe97aacb8e8dba4c",
-        "6857af6e7b1f799178b60ec5d46e4c9ff9f4209e"
+        "e4070ad8fabb9ade112aa38b494f61d1e5248584"
       ],
       "files": [
         "src/application/offline/localStore.ts",
         "src/application/offline/offlineQueue.ts",
-        "src/domain/offline/types.ts",
-        "src/domain/offline/validation.ts",
-        "src/infrastructure/persistence/bootstrap.ts",
-        "src/infrastructure/persistence/expoSqliteDriver.ts",
-        "src/infrastructure/persistence/fileLocalStore.ts",
-        "src/infrastructure/persistence/fileSystem.ts",
-        "src/infrastructure/persistence/migrations/migrations.ts",
-        "src/infrastructure/persistence/migrations/runMigrations.ts",
-        "src/infrastructure/persistence/nodeFileSystem.ts",
-        "src/infrastructure/persistence/nodeSqliteDriver.ts",
-        "src/infrastructure/persistence/sqlDriver.ts",
         "src/infrastructure/persistence/sqliteLocalStore.ts",
-        "course-tests/week-08-persistence.test.ts",
-        "tools/week08_evidence.mjs",
-        "docs/data-model.md",
-        "reports/week-08/migration-tests.json"
+        "src/infrastructure/persistence/migrations/runMigrations.ts",
+        "course-tests/week-08-persistence.test.ts"
       ],
       "tests": [
         "course-tests/week-08-persistence.test.ts"
       ],
-      "reviews": [],
-      "prediction": "La persistencia local conservara incidencias y operaciones offline tras reiniciar, y las migraciones fallidas dejaran intactos el esquema y los datos.",
-      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "observedResult": "La ejecucion observada termino con 1 suite aprobada y 8 de 8 pruebas pasadas. Incluyo reinicio conservando operationId, incidentId, baseVersion, authorId, notes y photoRefs; migracion v1 a v2 preservando filas; y rollback completo ante fallos inyectados y SQL invalido.",
-      "explanation": "Registro basado en los commits de Semana 08 atribuidos a ArmandoValerio en el historial Git y en la ejecucion observada de la suite de persistencia."
+      "prediction": "La cola SQLite conservara operationId, version base, autor y contenido despues de reiniciar, y una migracion fallida dejara intactos el esquema y las filas.",
+      "command": "npm test -- --ci --runInBand course-tests/week-08-persistence.test.ts",
+      "observedResult": "La suite de persistencia paso sus 8 pruebas con reinicio, migracion v1-v2 e inyecciones de rollback.",
+      "explanation": "La atribucion corresponde al commit e4070ad, que agrega la persistencia SQLite, la cola offline, las migraciones y sus pruebas."
+    },
+    {
+      "studentId": "oma4r6464",
+      "commitShas": [
+        "7f1c46a0c68cb90e5d7971a88e04f31586d00051"
+      ],
+      "files": [
+        "src/course-evaluation/index.ts",
+        "course-tests/public/week-08.test.ts",
+        "docs/CAMPUSOPS_API.md"
+      ],
+      "tests": [
+        "course-tests/public/week-08.test.ts"
+      ],
+      "prediction": "Los cambios independientes deben combinarse y una reasignacion remota concurrente debe declararse conflicto sin sobrescribir registros.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts",
+      "observedResult": "La suite publica valida conflicto de work, combinacion de campos independientes y deduplicacion por operationId.",
+      "explanation": "La atribucion corresponde al commit 7f1c46a, que integra el resolver de conflictos y la idempotencia de sincronizacion."
+    },
+    {
+      "studentId": "3523110340",
+      "commitShas": [
+        "d263369f12c5fba4933f9507a01082102bad5a58",
+        "f4318b1b6827b9cf441d3444b9f360dbbede0324"
+      ],
+      "files": [
+        "src/course-evaluation/index.ts",
+        "tools/week08_evidence.mjs",
+        "docs/sync-policy.md",
+        "reports/week-08/migration-tests.json"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/public/week-08.test.ts course-tests/week-08-persistence.test.ts",
+        "npm run typecheck",
+        "npm run lint"
+      ],
+      "prediction": "La implementacion debe comparar contenido JSON, ordenar los campos en conflicto, conservar la primera operacion repetida y generar evidencia con el SHA real.",
+      "command": "npm run evidence:week08",
+      "observedResult": "Las 2 suites y 11 pruebas pasaron; el reporte quedo generado con commitSha f4318b1b6827b9cf441d3444b9f360dbbede0324 y 11 checks en pass.",
+      "explanation": "Implemento los adaptadores de combinacion y deduplicacion, amplie el generador para incluir todos los escenarios y documente la politica de sincronizacion."
     }
-  ],
-  "pendingContributors": {
-    "count": 3,
-    "status": "pending",
-    "requiredInformation": [
-      "studentId",
-      "commitShas",
-      "files",
-      "tests or reviews",
-      "prediction",
-      "command",
-      "observedResult",
-      "explanation"
-    ],
-    "note": "No se agregaron registros ni atribuciones de otros integrantes porque sus datos verificables siguen pendientes. Este borrador no satisface todavía el validador que exige exactamente cuatro miembros."
-  }
+  ]
 }

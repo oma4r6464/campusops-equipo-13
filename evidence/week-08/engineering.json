@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "6857af6e7b1f799178b60ec5d46e4c9ff9f4209e",
-  "decision": "Usar SQLite como almacenamiento local principal para incidencias y operaciones offline, con operationId estable y datos de version base, autor, notas y referencias de fotos. Aplicar migraciones versionadas en una sola transaccion antes de hidratar el estado.",
+  "commitSha": "f4318b1b6827b9cf441d3444b9f360dbbede0324",
+  "decision": "Usar SQLite como almacenamiento local principal para incidencias y operaciones offline, con operationId estable, version base, autor y contenido. Ejecutar migraciones versionadas en una transaccion y conservar la cola hasta recibir confirmacion del servidor.",
   "alternatives": [
-    "Guardar el estado solo en memoria, descartado porque la cola y las incidencias se perderian al reiniciar la app.",
-    "Usar un archivo JSON como persistencia principal, descartado para este flujo porque SQLite ya ofrece transacciones y DDL atomico para los datos relacionales y sus migraciones. FileLocalStore queda como adaptador secundario.",
-    "Aplicar cada migracion y actualizar user_version por separado, descartado porque una falla intermedia podria dejar el esquema y su version desalineados."
+    "Guardar la cola solo en memoria, descartado porque se perderia al reiniciar.",
+    "Usar un archivo JSON como almacenamiento principal, descartado porque SQLite ofrece transacciones y migraciones atomicas para este modelo.",
+    "Eliminar la operacion despues de enviarla, descartado porque un error o conflicto podria perder la intencion local."
   ],
-  "tradeoff": "SQLite aporta transacciones, orden FIFO e integridad durante las migraciones, a cambio de mantener un esquema versionado y una capa de driver. La suite ejecuta SQLite real con Node; el driver nativo de Expo y la integracion de bootstrap en la app aun requieren validacion en dispositivo.",
+  "tradeoff": "SQLite aporta durabilidad, orden FIFO e integridad de migracion a cambio de mantener un esquema versionado y dos drivers para app y pruebas. La evidencia usa SQLite real con Node y no contiene datos sensibles.",
   "requirementIds": [
     "AC-01",
     "AC-02",
@@ -18,14 +18,34 @@
   ],
   "verification": [
     {
-      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts",
-      "result": "pass",
-      "evidence": "1 suite y 8 de 8 pruebas pasaron con SQLite real en archivos temporales y datos ficticios. Se verificaron persistencia al reiniciar, campos de identidad/version/autor/notas/fotos, migracion v1 a v2 y rollback ante falla inyectada y SQL invalido."
-    },
-    {
       "command": "npm run evidence:week08",
       "result": "pass",
-      "evidence": "reports/week-08/migration-tests.json registra 8 verificaciones aprobadas, incluidos reinicio, migracion exitosa, idempotencia, rechazo de downgrade y dos casos de rollback."
+      "evidence": "Se ejecutaron 2 suites y 11 pruebas: reinicio, recuperacion de syncing, deduplicacion, migracion v1-v2, idempotencia, rechazo de downgrade, dos rollbacks, conflicto y combinacion."
+    },
+    {
+      "command": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts course-tests/week-08-persistence.test.ts",
+      "result": "pass",
+      "evidence": "2 suites y 11 de 11 pruebas pasaron."
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "tsc --noEmit termino sin errores."
+    },
+    {
+      "command": "npm run lint",
+      "result": "pass",
+      "evidence": "ESLint termino sin errores."
+    },
+    {
+      "command": "make setup",
+      "result": "environment-failure",
+      "evidence": "No se ejecuto: el entorno Windows no tiene el comando make; se ejecuto npm ci como equivalente y agrego 980 paquetes sin error."
+    },
+    {
+      "command": "make verify-week-08 && make public-test-week-08",
+      "result": "environment-failure",
+      "evidence": "No se ejecuto: el entorno Windows no tiene make. Los comandos equivalentes del evaluador tampoco pudieron iniciar porque no hay Python disponible; las suites Node si se ejecutaron y pasaron."
     }
   ]
 }
