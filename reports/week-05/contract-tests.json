@@ -1,17 +1,43 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "4351dd165baaff2bf45a6bb8c1ab94d2122ac04c",
+  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
   "generatedAt": "2026-10-04T03:04:00-06:00",
   "checks": [
-    {"id": "remote-list", "status": "pass", "scenarioType": "nominal", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "La lista valida conserva el sobre remoto, valida DTO y se consume desde casos de uso sin HTTP directo en pantalla."},
-    {"id": "remote-detail", "status": "pass", "scenarioType": "nominal", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "El detalle valido se parsea y se muestra mediante gateway/casos de uso; la pantalla solo invoca servicios."},
-    {"id": "remote-create", "status": "pass", "scenarioType": "nominal", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "La creacion envia DTO con Idempotency-Key, valida la incidencia devuelta y la muestra en la UI."},
-    {"id": "nullable-payload", "status": "pass", "scenarioType": "boundary", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "payload null permanece como limite valido; no se fabrican descripcion, ubicacion ni incidencia de dominio."},
-    {"id": "published-parser", "status": "pass", "scenarioType": "boundary", "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx", "evidence": "28 pruebas pasaron: contrato publico, cliente, gateway, pantalla y casos de uso."}
+    {
+      "id": "remote-list",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "La lista valida conserva el sobre remoto, valida DTO y se consume desde casos de uso sin HTTP directo en pantalla."
+    },
+    {
+      "id": "remote-detail",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "El detalle valido se parsea y se muestra mediante gateway/casos de uso; la pantalla solo invoca servicios."
+    },
+    {
+      "id": "remote-create",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "La creacion envia DTO con Idempotency-Key, valida la incidencia devuelta y la muestra en la UI."
+    },
+    {
+      "id": "nullable-payload",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "payload null permanece como limite valido; no se fabrican descripcion, ubicacion ni incidencia de dominio."
+    },
+    {
+      "id": "published-parser",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts course-tests/week-05-client.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "28 pruebas pasaron: contrato publico, cliente, gateway, pantalla y casos de uso."
+    }
   ]
 }
-
-
-
-

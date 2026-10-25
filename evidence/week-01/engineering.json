@@ -1,14 +1,17 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "4351dd165baaff2bf45a6bb8c1ab94d2122ac04c",
+  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
   "decision": "Mantener el texto visible CampusOps como contrato estable de la pantalla y comprobarlo con el smoke test existente, porque una regresión mínima de presentación ya impide identificar correctamente la aplicación.",
   "alternatives": [
     "Cambiar el texto visible y actualizar la prueba para aceptar la nueva etiqueta.",
     "Eliminar la aserción del título y verificar únicamente el estado del backend."
   ],
   "tradeoff": "Conservar el contrato existente mantiene una comprobación simple y evita ocultar regresiones de interfaz, pero limita cambios futuros de copy hasta actualizar conscientemente el contrato y su evidencia.",
-  "requirementIds": ["AC-02", "AC-04"],
+  "requirementIds": [
+    "AC-02",
+    "AC-04"
+  ],
   "verification": [
     {
       "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --roots course-tests src --runTestsByPath course-tests/smoke.test.tsx",
@@ -17,7 +20,3 @@
     }
   ]
 }
-
-
-
-

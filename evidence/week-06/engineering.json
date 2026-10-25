@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "4351dd165baaff2bf45a6bb8c1ab94d2122ac04c",
+  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
   "decision": "Implementar la renovacion de sesion como single-flight: una sola renovacion queda activa cuando varias solicitudes reciben 401, las solicitudes concurrentes esperan el mismo resultado y logout o refresh fallido limpian el estado persistido.",
   "alternatives": [
     "Ejecutar un refresh por cada 401, descartado porque produce multiples tokens, condiciones de carrera y carga innecesaria al backend.",
@@ -9,7 +9,13 @@
     "Usar una promesa compartida de refresh con reintento limitado, elegido porque cubre concurrencia, evita bucles y es reproducible en pruebas."
   ],
   "tradeoff": "La estrategia single-flight agrega estado de coordinacion y exige limpiar correctamente la promesa al terminar, pero reduce duplicidad, permite pruebas deterministas y mantiene un limite claro para volver al login cuando la sesion ya no puede recuperarse.",
-  "requirementIds": ["AC-01", "AC-02", "AC-03", "AC-04", "AC-05"],
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
   "verification": [
     {
       "command": "npm run typecheck",
@@ -28,8 +34,3 @@
     }
   ]
 }
-
-
-
-
-

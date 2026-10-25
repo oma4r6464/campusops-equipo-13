@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "commitSha": "b5bfcad0cbad97077ffe6254a9df7a66bbb9418e",
+  "generatedAt": "2026-10-25T05:08:47.443Z",
+  "checks": [
+    {
+      "id": "queue-survives-restart",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Tras cerrar y reabrir la base SQLite en disco, la cola conserva orden FIFO y op-demo-0001 mantiene incidentId=fake-inc-001, baseVersion=3, authorId=tech-demo-01, notes y photoRefs [fake-0001.jpg, fake-0002.jpg]; la segunda apertura aplica 0 migraciones. (35 ms)"
+    },
+    {
+      "id": "syncing-recovers-after-restart",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Una operacion marcada syncing antes del cierre se hidrata como pending con el mismo operationId para reintento idempotente. (25 ms)"
+    },
+    {
+      "id": "duplicate-operation-no-partial-state",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "El segundo enqueue con op-demo-fixed lanza DuplicateOperationError; la cola sigue con 1 registro y notes=\"uno\". (16 ms)"
+    },
+    {
+      "id": "migration-v1-to-v2-preserves-data",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Base v1 con 2 operaciones (columna note) migra a v2: applied=[v2-notes-and-photo-refs], user_version=2, ambas filas conservan operationId, baseVersion=3, authorId y notes; photoRefs=[]; luego acepta photoRefs nuevos (3 filas). (33 ms)"
+    },
+    {
+      "id": "migration-idempotent",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "runMigrations sobre una base ya en v2 devuelve {from:2,to:2,applied:[]}. (15 ms)"
+    },
+    {
+      "id": "migration-refuses-downgrade",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Con user_version=99 el arranque lanza MigrationError y el volcado logico de la base queda identico. (24 ms)"
+    },
+    {
+      "id": "migration-injected-failure-rollback",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Falla inyectada tras ejecutar v2 y antes del COMMIT: MigrationError{fromVersion:1,failedVersion:2}; esquema, user_version=1 y filas identicos al volcado previo (sigue columna note, sin photo_refs). Un arranque posterior migra 1->2 conservando las 2 operaciones. (34 ms)"
+    },
+    {
+      "id": "migration-broken-sql-rollback",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Migracion v2 que renombra columna y agrega photo_refs y luego ejecuta SQL invalido: MigrationError failedVersion=2 y el volcado logico es identico al previo (DDL revertido). (24 ms)"
+    },
+    {
+      "id": "reassignment-conflict-preserves-records",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Una reasignacion remota y un inicio local sobre work producen conflict con fields=[work]; base, local y remote no se mutan. (16 ms)"
+    },
+    {
+      "id": "independent-changes-merge",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Cambios independientes combinan title local y priority remoto; cambios distintos sobre title producen conflict con fields=[title]. (1 ms)"
+    },
+    {
+      "id": "operation-id-deduplication",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/week-08-persistence.test.ts course-tests/public/week-08.test.ts",
+      "evidence": "Al repetir operationId op-1 se conserva la primera entrada y la salida queda [op-1, op-2] sin mutar la entrada. (0 ms)"
+    }
+  ]
+}

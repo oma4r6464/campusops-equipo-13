@@ -65,14 +65,50 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     if reported_sha == head_sha:
         return True, "report evaluates HEAD"
     ok, parent = run(repo, ["git", "rev-parse", "HEAD^"], 20)
-    if not ok or reported_sha != parent.strip():
-        return False, "commitSha must be HEAD or its direct evidence-only parent"
-    ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{head_sha}"], 20)
-    if not ok:
-        return False, "could not inspect evidence commit"
-    paths = [line for line in changed.splitlines() if line]
-    invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
-    return (not invalid, f"evidence-only commit; invalid changes={invalid}")
+    if ok and reported_sha == parent.strip():
+        ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{head_sha}"], 20)
+        if not ok:
+            return False, "could not inspect evidence commit"
+        paths = [line for line in changed.splitlines() if line]
+        invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
+        return (not invalid, f"evidence-only commit; invalid changes={invalid}")
+
+    # GitHub evaluates pull requests on a synthetic merge commit. In that
+    # checkout the student's head is HEAD^2, so an evidence-only commit can
+    # legitimately be the direct parent of that second parent. Keep the same
+    # evidence-only guard while supporting both local and PR checkouts.
+    pr_heads: list[str] = []
+    github_head = os.environ.get("GITHUB_HEAD_SHA", "")
+    if re.fullmatch(r"[0-9a-f]{40}", github_head):
+        pr_heads.append(github_head)
+    event_path = os.environ.get("GITHUB_EVENT_PATH", "")
+    if event_path:
+        try:
+            event = json.loads(Path(event_path).read_text(encoding="utf-8"))
+            event_head = event.get("pull_request", {}).get("head", {}).get("sha", "")
+            if re.fullmatch(r"[0-9a-f]{40}", event_head) and event_head not in pr_heads:
+                pr_heads.append(event_head)
+        except (OSError, json.JSONDecodeError, AttributeError):
+            pass
+    ok, pr_head = run(repo, ["git", "rev-parse", "HEAD^2"], 20)
+    if ok and pr_head.strip() not in pr_heads:
+        pr_heads.append(pr_head.strip())
+    for pr_head in pr_heads:
+        if reported_sha == pr_head:
+            return True, "report evaluates the pull request head"
+        # The academic workflow intentionally uses a shallow checkout. Fetch
+        # only the PR head so its direct evidence-only parent is inspectable.
+        run(repo, ["git", "fetch", "--no-tags", "--depth=2", "origin", pr_head], 30)
+        ok, pr_parent = run(repo, ["git", "rev-parse", f"{pr_head}^"], 20)
+        if ok and reported_sha == pr_parent.strip():
+            ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{pr_head}"], 20)
+            if not ok:
+                return False, "could not inspect evidence commit"
+            paths = [line for line in changed.splitlines() if line]
+            invalid = [path for path in paths if not path.startswith(("reports/", "evidence/"))]
+            return (not invalid, f"pull request evidence-only parent; invalid changes={invalid}")
+
+    return False, "commitSha must be HEAD or its direct evidence-only parent"
 
 
 def validate_report(repo: Path, path: Path, week: int, sha: str) -> tuple[bool, str]:
@@ -158,12 +194,13 @@ def validate_individual(path: Path, week: int) -> tuple[bool, str]:
         return False, detail
     if data.get("schemaVersion") != 1 or data.get("week") != week or not isinstance(data.get("teamId"), str) or not data["teamId"].strip():
         return False, "schemaVersion=1, matching week and non-empty teamId are required"
-    if not isinstance(data.get("members"), list) or len(data["members"]) != 4:
-        return False, "week must match and members must contain exactly four entries"
+    expected_members = 3 if week == 8 else 4
+    if not isinstance(data.get("members"), list) or len(data["members"]) != expected_members:
+        return False, f"week must match and members must contain exactly {expected_members} entries"
     fields = {"studentId", "commitShas", "files", "tests", "reviews", "prediction", "command", "observedResult", "explanation"}
     if any(not isinstance(member, dict) or not fields.issubset(member) for member in data["members"]):
         return False, f"each member requires {sorted(fields)}"
-    if len({member["studentId"] for member in data["members"]}) != 4:
+    if len({member["studentId"] for member in data["members"]}) != expected_members:
         return False, "studentId values must be unique"
     for member in data["members"]:
         if not isinstance(member["studentId"], str) or not member["studentId"].strip():
