@@ -96,6 +96,9 @@ def evidence_sha_matches(repo: Path, reported_sha: object, head_sha: str) -> tup
     for pr_head in pr_heads:
         if reported_sha == pr_head:
             return True, "report evaluates the pull request head"
+        # The academic workflow intentionally uses a shallow checkout. Fetch
+        # only the PR head so its direct evidence-only parent is inspectable.
+        run(repo, ["git", "fetch", "--no-tags", "--depth=2", "origin", pr_head], 30)
         ok, pr_parent = run(repo, ["git", "rev-parse", f"{pr_head}^"], 20)
         if ok and reported_sha == pr_parent.strip():
             ok, changed = run(repo, ["git", "diff", "--name-only", f"{reported_sha}..{pr_head}"], 20)
