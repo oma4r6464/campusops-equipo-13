@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "commitSha": "43d49eb7082015b211673f6d6f146a732dc58691",
+  "decision": "Usar SQLite como almacenamiento local principal para incidencias y operaciones offline, con operationId estable, version base, autor y contenido. Ejecutar migraciones versionadas en una transaccion y conservar la cola hasta recibir confirmacion del servidor.",
+  "alternatives": [
+    "Guardar la cola solo en memoria, descartado porque se perderia al reiniciar.",
+    "Usar un archivo JSON como almacenamiento principal, descartado porque SQLite ofrece transacciones y migraciones atomicas para este modelo.",
+    "Eliminar la operacion despues de enviarla, descartado porque un error o conflicto podria perder la intencion local."
+  ],
+  "tradeoff": "SQLite aporta durabilidad, orden FIFO e integridad de migracion a cambio de mantener un esquema versionado y dos drivers para app y pruebas. La evidencia usa SQLite real con Node y no contiene datos sensibles.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
+  "verification": [
+    {
+      "command": "npm run evidence:week08",
+      "result": "pass",
+      "evidence": "Se ejecutaron 2 suites y 11 pruebas: reinicio, recuperacion de syncing, deduplicacion, migracion v1-v2, idempotencia, rechazo de downgrade, dos rollbacks, conflicto y combinacion."
+    },
+    {
+      "command": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts course-tests/week-08-persistence.test.ts",
+      "result": "pass",
+      "evidence": "2 suites y 11 de 11 pruebas pasaron."
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "tsc --noEmit termino sin errores."
+    },
+    {
+      "command": "npm run lint",
+      "result": "pass",
+      "evidence": "ESLint termino sin errores."
+    },
+    {
+      "command": "make setup",
+      "result": "environment-failure",
+      "evidence": "No se ejecuto: el entorno Windows no tiene el comando make; se ejecuto npm ci como equivalente y agrego 980 paquetes sin error."
+    },
+    {
+      "command": "make verify-week-08 && make public-test-week-08",
+      "result": "environment-failure",
+      "evidence": "No se ejecuto: el entorno Windows no tiene make. Los comandos equivalentes del evaluador tampoco pudieron iniciar porque no hay Python disponible; las suites Node si se ejecutaron y pasaron."
+    }
+  ]
+}
