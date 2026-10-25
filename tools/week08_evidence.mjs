@@ -12,9 +12,9 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const TEST_FILE = 'course-tests/week-08-persistence.test.ts';
+const TEST_FILES = ['course-tests/week-08-persistence.test.ts', 'course-tests/public/week-08.test.ts'];
 const OUTPUT = 'reports/week-08/migration-tests.json';
-const JEST_ARGS = ['--no-watchman', '--cacheDirectory', '.jest-cache', '--ci', '--runInBand', TEST_FILE];
+const JEST_ARGS = ['--no-watchman', '--cacheDirectory', '.jest-cache', '--ci', '--runInBand', ...TEST_FILES];
 const COMMAND = `npx jest ${JEST_ARGS.join(' ')}`;
 
 /** Titulo de la prueba -> id estable y tipo de escenario. */
@@ -27,6 +27,9 @@ const CASES = {
   'un esquema mas nuevo que la app no se degrada': ['migration-refuses-downgrade', 'boundary'],
   'falla inyectada tras aplicar v2 hace rollback completo: sin estado parcial': ['migration-injected-failure-rollback', 'failure'],
   'migracion con SQL roto a mitad de camino revierte el DDL ya ejecutado': ['migration-broken-sql-rollback', 'failure'],
+  'CampusOps detects offline start versus remote reassignment without mutating either record': ['reassignment-conflict-preserves-records', 'failure'],
+  'merges independent field changes and reports same-field conflict': ['independent-changes-merge', 'boundary'],
+  'deduplicates a replayed operation by stable identity': ['operation-id-deduplication', 'boundary'],
 };
 
 /** Resultado observable esperado que la prueba afirma (se reporta solo si pasa). */
@@ -46,6 +49,12 @@ const OBSERVED = {
     'Falla inyectada tras ejecutar v2 y antes del COMMIT: MigrationError{fromVersion:1,failedVersion:2}; esquema, user_version=1 y filas identicos al volcado previo (sigue columna note, sin photo_refs). Un arranque posterior migra 1->2 conservando las 2 operaciones.',
   'migration-broken-sql-rollback':
     'Migracion v2 que renombra columna y agrega photo_refs y luego ejecuta SQL invalido: MigrationError failedVersion=2 y el volcado logico es identico al previo (DDL revertido).',
+  'reassignment-conflict-preserves-records':
+    'Una reasignacion remota y un inicio local sobre work producen conflict con fields=[work]; base, local y remote no se mutan.',
+  'independent-changes-merge':
+    'Cambios independientes combinan title local y priority remoto; cambios distintos sobre title producen conflict con fields=[title].',
+  'operation-id-deduplication':
+    'Al repetir operationId op-1 se conserva la primera entrada y la salida queda [op-1, op-2] sin mutar la entrada.',
 };
 
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
