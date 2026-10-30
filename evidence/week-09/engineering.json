@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "31627bbd1a4aff81302ea5d73585dea8d5a0afcb",
+  "decision": "Integrar el proveedor de geocodificacion controlado mediante un adaptador con timeout de 2 segundos, validacion estricta de coordenadas finitas en rango [-90, 90] y [-180, 180], cache en memoria con TTL de 5 minutos exclusivamente para respuestas validas y fallback inmediato a la referencia manual escrita por el usuario cuando el proveedor falla o devuelve datos invalidos.",
+  "alternatives": [
+    "Bloquear el registro de la incidencia o propagar el error HTTP cuando el proveedor de geocodificacion falla, descartado porque impide reportar incidencias operativas ante caidas o limites de cuota del servicio externo.",
+    "Cachear todas las respuestas incluyendo errores 429 o payloads incompletos y reintentar automaticamente en el flujo interactivo, descartado porque prolonga la espera del usuario y retiene fallos transitorios en memoria.",
+    "Rellenar coordenadas por defecto (como 0, 0) cuando el proveedor falla, descartado porque contamina el dominio con ubicaciones falsas indistinguibles de coordenadas verificadas."
+  ],
+  "tradeoff": "El fallback manual inmediato y la cache en memoria acotada (100 entradas, 5 minutos) evitan latencia adicional y protegen al backend contra consultas repetidas, a cambio de perder la cache al reiniciar la app y registrar la ubicacion solo como referencia textual cuando el proveedor no esta disponible.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
+  "verification": [
+    {
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "result": "pass",
+      "evidence": "3 suites y 28 pruebas pasaron: coordenadas validas, limites geograficos, rechazo de payloads incompletos o NaN, timeout, HTTP 429, desconexion, cache con TTL y fallback manual en UI."
+    },
+    {
+      "command": "npm run backend:self-test",
+      "result": "pass",
+      "evidence": "El self-test del backend controlado verifico los escenarios success, rate-limit, server-error, incomplete, invalid-coordinates y malformed del endpoint /v1/geocoding."
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "tsc --noEmit finalizo sin errores de tipos."
+    },
+    {
+      "command": "npm run architecture:check",
+      "result": "pass",
+      "evidence": "La verificacion de fronteras arquitectonicas confirmo que UI y dominio no importan infraestructura ni clientes HTTP directamente."
+    }
+  ]
+}

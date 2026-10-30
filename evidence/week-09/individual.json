@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "teamId": "equipo-13",
+  "members": [
+    {
+      "studentId": "ArmandoValerio",
+      "commitShas": [
+        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+      ],
+      "files": [
+        "src/campusops/locationValidation.ts",
+        "src/api/courseGeocodingClient.ts",
+        "src/application/campusOpsServices.ts",
+        "src/infrastructure/incidents/courseBackendConfig.ts",
+        "src/ui/CampusOpsScreen.tsx",
+        "src/course-evaluation/index.ts",
+        "course-tests/week-09-location.test.ts",
+        "course-tests/public/week-09.test.ts",
+        "docs/resilience-policy.md",
+        "reports/week-09/fault-injection.json"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+        "npm run backend:self-test"
+      ],
+      "reviews": [
+        "docs/CAMPUSOPS_API.md",
+        "docs/resilience-policy.md"
+      ],
+      "prediction": "El selector de ubicacion aceptara solo etiquetas no vacias y coordenadas finitas en rango [-90, 90] y [-180, 180]; ante timeout, HTTP 429, desconexion o datos malformados conservara la ubicacion manual sin coordenadas inventadas ni cachear errores.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "observedResult": "Pasaron las 3 suites y 28 pruebas, validando seleccion de coordenadas del proveedor, rechazo de datos corruptos, cache con TTL de 5 minutos y fallback manual en UI.",
+      "explanation": "Implemente la validacion de ubicacion, el cliente de geocodificacion con timeout y cache en memoria, la politica de reintentos planRetry, el fallback manual en pantalla, la documentacion de resiliencia y las pruebas de inyeccion de fallos."
+    },
+    {
+      "studentId": "oma4r6464",
+      "commitShas": [
+        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+      ],
+      "files": [
+        "src/course-evaluation/index.ts",
+        "course-tests/public/week-09.test.ts"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/public/week-09.test.ts"
+      ],
+      "reviews": [
+        "docs/resilience-policy.md"
+      ],
+      "prediction": "La planificacion de reintentos respetara Retry-After finito, limitara los intentos a tres y exigira clave de idempotencia estable para POST.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "observedResult": "La suite publica de Semana 09 paso validando planRetry y selectIncidentLocation.",
+      "explanation": "Participacion registrada para validacion de contratos publicos de reintentos e idempotencia en Semana 09."
+    },
+    {
+      "studentId": "jesus-vegmed",
+      "commitShas": [
+        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+      ],
+      "files": [
+        "src/api/courseGeocodingClient.ts",
+        "course-tests/week-09-location.test.ts"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/week-09-location.test.ts"
+      ],
+      "reviews": [
+        "reports/week-09/fault-injection.json"
+      ],
+      "prediction": "Las respuestas invalidas, timeouts y errores 429 no quedaran en cache y permitiran recuperar el servicio en consultas posteriores.",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-location.test.ts",
+      "observedResult": "La suite de ubicacion valido cache normalizada, expiracion por TTL y exclusion de respuestas fallidas.",
+      "explanation": "Participacion registrada para verificacion de escenarios de cache e inyeccion de fallos del proveedor de ubicacion."
+    },
+    {
+      "studentId": "3523110007",
+      "commitShas": [
+        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+      ],
+      "files": [
+        "evidence/week-09/individual.json",
+        "evidence/week-09/engineering.json",
+        "reports/week-09/fault-injection.json",
+        "reports/week-09/retry-metrics.json"
+      ],
+      "tests": [
+        "npm run typecheck",
+        "npm run lint"
+      ],
+      "reviews": [
+        "evidence/week-09/engineering.json"
+      ],
+      "prediction": "La integracion conservara las fronteras arquitectonicas, pruebas previas y esquemas de evidencia alineados al commit evaluado.",
+      "command": "npm run typecheck && npm run lint",
+      "observedResult": "TypeScript, arquitectura y linter terminaron sin errores con los artefactos de evidencia de Semana 09.",
+      "explanation": "Registro de trazabilidad y verificacion de esquemas de evidencia e integracion para el equipo-13."
+    }
+  ]
+}
