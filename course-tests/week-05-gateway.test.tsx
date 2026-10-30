@@ -1,6 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import { createCourseIncidentClient } from '../src/api/courseIncidentClient';
+import type { GeocodingLookupResult } from '../src/campusops/contracts';
 import { createCampusOpsServices } from '../src/application/campusOpsServices';
 import type { IncidentGateway } from '../src/application/incidents/incidentGateway';
 import { createIncidentUseCases } from '../src/application/incidents/incidentUseCases';
@@ -143,12 +144,16 @@ describe('casos de uso', () => {
 describe('pantalla (sin HTTP directo)', () => {
   const healthReader = { check: async () => 'available' as const };
 
-  function services(gateway: IncidentGateway) {
+  function services(
+    gateway: IncidentGateway,
+    locationProvider?: (query: string) => Promise<GeocodingLookupResult>,
+  ) {
     let counter = 0;
     return createCampusOpsServices({
       incidentGateway: gateway,
       backendHealthReader: healthReader,
       newOperationKey: () => `op-${(counter += 1)}`,
+      ...(locationProvider ? { locationProvider } : {}),
     });
   }
 
@@ -162,6 +167,26 @@ describe('pantalla (sin HTTP directo)', () => {
 
     await waitFor(() => expect(view.getByText('Incidencia creada correctamente.')).toBeTruthy());
     await waitFor(() => expect(view.getByText('Ubicacion: Edificio A')).toBeTruthy());
+  });
+
+  test('conserva la referencia manual cuando el proveedor agota el tiempo', async () => {
+    const memoryGateway = createInMemoryIncidentGateway();
+    const create = jest.fn(memoryGateway.create);
+    const gateway: IncidentGateway = { ...memoryGateway, create };
+    const locationProvider = jest.fn(async () => ({ kind: 'unavailable', reason: 'timeout' }) as const);
+    const view = await render(<CampusOpsScreen services={services(gateway, locationProvider)} />);
+    await view.findByText('Lista de incidencias');
+
+    await fireEvent.changeText(view.getByLabelText('Descripcion de la incidencia'), 'Falla ficticia');
+    await fireEvent.changeText(view.getByLabelText('Ubicacion de la incidencia'), '  Edificio C, junto al laboratorio  ');
+    await fireEvent.press(view.getByText('Crear incidencia'));
+
+    await waitFor(() => expect(view.getByText('Proveedor no disponible; se conservó la ubicación manual.')).toBeTruthy());
+    expect(locationProvider).toHaveBeenCalledWith('  Edificio C, junto al laboratorio  ');
+    expect(create).toHaveBeenCalledWith(
+      expect.objectContaining({ location: '  Edificio C, junto al laboratorio  ' }),
+      'op-1',
+    );
   });
 
   test('formulario vacio muestra aviso y no crea nada', async () => {

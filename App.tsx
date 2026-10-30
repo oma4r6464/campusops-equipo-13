@@ -2,6 +2,7 @@ import { createCampusOpsServices } from './src/application/campusOpsServices';
 import type { IncidentGateway } from './src/application/incidents/incidentGateway';
 import {
   createCourseIncidentGateway,
+  createCourseGeocodingProvider,
   createOperationKey,
 } from './src/infrastructure/incidents/courseBackendConfig';
 import { createInMemoryIncidentGateway } from './src/infrastructure/incidents/inMemoryIncidentGateway';
@@ -22,6 +23,7 @@ const campusOpsServices = createCampusOpsServices({
   incidentGateway: createIncidentGateway(),
   backendHealthReader: createCourseBackendHealthReader(),
   newOperationKey: createOperationKey,
+  locationProvider: createCourseGeocodingProvider().lookup,
 });
 
 export default function App() {

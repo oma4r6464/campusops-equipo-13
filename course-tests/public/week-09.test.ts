@@ -4,9 +4,27 @@ test('CampusOps accepts valid geocoding and otherwise keeps manual incident loca
   expect(selectIncidentLocation({ label: 'Zona de prueba', latitude: 0, longitude: 0 }, 'Edificio manual')).toEqual({
     source: 'provider', label: 'Zona de prueba', latitude: 0, longitude: 0,
   });
-  for (const value of [null, { status: 429 }, { label: 'Incompleta' }, { label: 'Inválida', latitude: 91, longitude: 0 }]) {
-    expect(selectIncidentLocation(value, 'Edificio manual')).toEqual({ source: 'manual', label: 'Edificio manual' });
+  for (const value of [
+    null,
+    { status: 429 },
+    { error: 'timeout' },
+    { label: 'Incompleta' },
+    { label: 'Inválida', latitude: 91, longitude: 0 },
+    { label: 'Inválida', latitude: Number.NaN, longitude: 0 },
+    { label: 123, latitude: 0, longitude: 0 },
+    { label: '   ', latitude: 0, longitude: 0 },
+  ]) {
+    expect(selectIncidentLocation(value, '  Edificio manual, junto al patio  ')).toEqual({
+      source: 'manual',
+      label: '  Edificio manual, junto al patio  ',
+    });
   }
+});
+
+test('acepta los límites de coordenadas geográficas', () => {
+  expect(selectIncidentLocation({ label: 'Límite ficticio', latitude: -90, longitude: 180 }, 'Manual')).toEqual({
+    source: 'provider', label: 'Límite ficticio', latitude: -90, longitude: 180,
+  });
 });
 
 test('CampusOps can retry a lost resolution response only with a stable operation key', () => {

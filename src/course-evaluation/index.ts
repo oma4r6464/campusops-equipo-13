@@ -7,6 +7,7 @@ import type {
   SyncRecord,
 } from './contracts';
 import type { IncidentLocation } from '../campusops/contracts';
+import { selectIncidentLocation as selectLocation } from '../campusops/locationValidation';
 import { parseRemoteEnvelope } from '../api/remoteResource';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
 
@@ -186,7 +187,29 @@ export function planRetry(_input: Readonly<{
   retryAfterMs?: number;
   idempotencyKey?: string;
 }>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  return pending('planRetry');
+  const requiresStableIdempotencyKey = _input.method === 'POST'
+    && !(_input.idempotencyKey && _input.idempotencyKey.trim().length > 0);
+  if (requiresStableIdempotencyKey) {
+    return { retry: false, delayMs: 0, requiresStableIdempotencyKey: true };
+  }
+
+  if (!Number.isInteger(_input.attempt) || _input.attempt < 1 || _input.attempt >= 4) {
+    return { retry: false, delayMs: 0, requiresStableIdempotencyKey: false };
+  }
+
+  const retryable = _input.status === 'timeout'
+    || _input.status === 408
+    || _input.status === 429
+    || (_input.status >= 500 && _input.status <= 599);
+  if (!retryable) return { retry: false, delayMs: 0, requiresStableIdempotencyKey: false };
+
+  const retryAfterIsValid = _input.retryAfterMs !== undefined
+    && Number.isFinite(_input.retryAfterMs)
+    && _input.retryAfterMs >= 0;
+  const delayMs = retryAfterIsValid
+    ? _input.retryAfterMs
+    : Math.min(8000, 250 * (2 ** (_input.attempt - 1)));
+  return { retry: true, delayMs, requiresStableIdempotencyKey: false };
 }
 
 export function reduceRemoteResponses(_input: Readonly<{
@@ -202,7 +225,7 @@ export function reducePermissionLifecycle(
   return pending('reducePermissionLifecycle');
 }
 
-/** Week 09: see docs/CAMPUSOPS_API.md; this is not a completed solution. */
-export function selectIncidentLocation(_provider: unknown, _manualLabel: string): IncidentLocation {
-  return pending('selectIncidentLocation');
+/** Week 09: uses only validated provider coordinates and otherwise preserves manual input. */
+export function selectIncidentLocation(provider: unknown, manualLabel: string): IncidentLocation {
+  return selectLocation(provider, manualLabel);
 }

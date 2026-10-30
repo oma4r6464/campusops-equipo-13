@@ -90,6 +90,7 @@ export function CampusOpsScreen({ services }: Props) {
   const [category, setCategory] = useState<IncidentCategory>(INCIDENT_CATEGORIES[0]);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
+  const [locationSource, setLocationSource] = useState<'provider' | 'manual' | null>(null);
   const [createState, setCreateState] = useState<CreateState>({ status: 'idle' });
 
   const mounted = useRef(true);
@@ -152,7 +153,14 @@ export function CampusOpsScreen({ services }: Props) {
     saving.current = true;
     setCreateState({ status: 'saving' });
     operationKey.current ??= services.newOperationKey();
-    const result = await services.createIncident({ category, description, location }, operationKey.current);
+    const resolvedLocation = await services.resolveIncidentLocation(location);
+    if (!mounted.current) return;
+    setLocationSource(resolvedLocation.source);
+    if (resolvedLocation.source === 'provider') setLocation(resolvedLocation.label);
+    const result = await services.createIncident(
+      { category, description, location: resolvedLocation.label },
+      operationKey.current,
+    );
     saving.current = false;
     if (!mounted.current) return;
 
@@ -267,11 +275,18 @@ export function CampusOpsScreen({ services }: Props) {
           />
           <TextInput
             accessibilityLabel="Ubicacion de la incidencia"
-            onChangeText={setLocation}
-            placeholder="Ubicacion (ej. Biblioteca, planta alta)"
+            onChangeText={(value) => {
+              setLocation(value);
+              setLocationSource(null);
+            }}
+            placeholder="Edificio, zona o referencia"
             style={styles.input}
             value={location}
           />
+          {locationSource === 'manual' ? (
+            <Text>Proveedor no disponible; se conservó la ubicación manual.</Text>
+          ) : null}
+          {locationSource === 'provider' ? <Text>Ubicación confirmada por el proveedor de prueba.</Text> : null}
           <Pressable
             accessibilityRole="button"
             accessibilityState={{ busy: createState.status === 'saving', disabled: createState.status === 'saving' }}
