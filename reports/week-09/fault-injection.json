@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "31627bbd1a4aff81302ea5d73585dea8d5a0afcb",
+  "mode": "local-controlled",
+  "generatedAt": "2026-10-30T16:11:42-06:00",
+  "status": "pass",
+  "data": "Fictitious fixtures only; no public geocoding service or live provider was used.",
+  "checks": [
+    {
+      "id": "valid-provider-location",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "The controlled fetch double returned a fictitious label and valid finite coordinates; the selector preserved label and coordinates."
+    },
+    {
+      "id": "invalid-and-incomplete-provider-data",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "Incomplete JSON, wrong field types, NaN and out-of-range coordinates were rejected; manual output contained no coordinates."
+    },
+    {
+      "id": "provider-timeout",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "An abort-aware controlled fetch double reproduced the timeout and produced an unavailable result."
+    },
+    {
+      "id": "provider-rate-limit",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "A controlled HTTP 429 response produced rate_limited and was not cached."
+    },
+    {
+      "id": "provider-disconnection",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "A controlled fetch rejection reproduced a network disconnection and produced an unavailable result."
+    },
+    {
+      "id": "manual-location-fallback",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "The UI integration test submitted the exact user-entered fictitious building reference, including surrounding spaces, after timeout."
+    },
+    {
+      "id": "location-cache",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts course-tests/week-09-location.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "A valid normalized query reused a cache entry, TTL expiry caused a fresh fetch, and invalid/429 responses were not cached."
+    },
+    {
+      "id": "controlled-backend-geocoding",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm run backend:self-test",
+      "evidence": "The local controlled backend self-test passed its fictitious geocoding success, rate-limit, server-error, incomplete, invalid-coordinate and malformed-response scenarios."
+    },
+    {
+      "id": "typecheck-architecture-and-lint",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm run typecheck; npm run architecture:check; npx eslint src/api/courseGeocodingClient.ts src/campusops/contracts.ts src/campusops/locationValidation.ts src/course-evaluation/index.ts src/application/campusOpsServices.ts src/application/incidents/incidentUseCases.ts src/infrastructure/incidents/courseBackendConfig.ts src/ui/CampusOpsScreen.tsx App.tsx course-tests/week-09-location.test.ts course-tests/public/week-09.test.ts course-tests/week-05-gateway.test.tsx",
+      "evidence": "TypeScript, architecture boundaries and lint completed successfully."
+    },
+    {
+      "id": "existing-ui-regression",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/smoke.test.tsx course-tests/week-02-ui.test.tsx",
+      "evidence": "Both app smoke and existing UI tests passed."
+    }
+  ],
+  "testSummary": {
+    "locationAndFallbackCommand": "passed: 3 suites, 28 tests",
+    "existingUiCommand": "passed: 2 suites, 2 tests",
+    "backendSelfTest": "passed"
+  }
+}

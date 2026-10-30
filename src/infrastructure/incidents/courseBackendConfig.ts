@@ -1,4 +1,5 @@
 import { createCourseIncidentClient } from '../../api/courseIncidentClient';
+import { createCourseGeocodingClient } from '../../api/courseGeocodingClient';
 import { createCloudIncidentGateway } from './cloudIncidentGateway';
 
 // Fixtures publicos del backend didactico (docs/CAMPUSOPS_API.md): no son secretos ni
@@ -6,18 +7,30 @@ import { createCloudIncidentGateway } from './cloudIncidentGateway';
 const DEFAULT_URL = 'http://127.0.0.1:4310';
 const FIXTURE_ACTOR = 'reporter-1';
 const FIXTURE_CREDENTIAL = 'course-valid-token';
+const BACKEND_URL = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL || DEFAULT_URL;
 
 export function createCourseIncidentGateway(
   onTelemetry?: (event: unknown) => void,
 ) {
   const client = createCourseIncidentClient({
-    baseUrl: process.env.EXPO_PUBLIC_COURSE_BACKEND_URL || DEFAULT_URL,
+    baseUrl: BACKEND_URL,
     actorId: process.env.EXPO_PUBLIC_COURSE_ACTOR || FIXTURE_ACTOR,
     accessToken: FIXTURE_CREDENTIAL,
     timeoutMs: 2000,
     ...(onTelemetry ? { onTelemetry } : {}),
   });
   return createCloudIncidentGateway(client);
+}
+
+export function createCourseGeocodingProvider() {
+  return createCourseGeocodingClient({
+    baseUrl: BACKEND_URL,
+    actorId: process.env.EXPO_PUBLIC_COURSE_ACTOR || FIXTURE_ACTOR,
+    accessToken: FIXTURE_CREDENTIAL,
+    timeoutMs: 2000,
+    cacheTtlMs: 5 * 60 * 1000,
+    maxCacheEntries: 100,
+  });
 }
 
 /** Clave estable por intento: no depende de datos del usuario ni de la red. */

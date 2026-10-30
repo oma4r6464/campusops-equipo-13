@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "31627bbd1a4aff81302ea5d73585dea8d5a0afcb",
+  "generatedAt": "2026-10-30T16:28:00-06:00",
+  "checks": [
+    {
+      "id": "idempotent-post-retry-with-stable-key",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "planRetry allows retrying a timed-out POST request on attempt 1 when a non-empty idempotencyKey is provided."
+    },
+    {
+      "id": "post-without-idempotency-key-blocked",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "planRetry refuses to retry POST requests lacking a stable idempotencyKey and marks requiresStableIdempotencyKey=true."
+    },
+    {
+      "id": "retry-after-and-attempt-limit-respected",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "planRetry uses finite Retry-After headers in milliseconds, applies exponential backoff up to 4000ms, and stops retrying after attempt 3 or on 4xx client errors."
+    }
+  ]
+}
