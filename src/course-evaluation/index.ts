@@ -186,7 +186,27 @@ export function planRetry(_input: Readonly<{
   retryAfterMs?: number;
   idempotencyKey?: string;
 }>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  return pending('planRetry');
+  const requiresStableIdempotencyKey = _input.method === 'POST' && typeof _input.idempotencyKey !== 'string';
+  const retryableStatus = _input.status === 'timeout'
+    || _input.status === 408
+    || _input.status === 429
+    || (typeof _input.status === 'number' && _input.status >= 500 && _input.status <= 599);
+  const validAttempt = Number.isInteger(_input.attempt) && _input.attempt >= 1;
+  const retry = validAttempt
+    && _input.attempt < 4
+    && retryableStatus
+    && !requiresStableIdempotencyKey;
+
+  if (!retry) {
+    return { retry: false, delayMs: 0, requiresStableIdempotencyKey };
+  }
+
+  const retryAfterMs = _input.retryAfterMs;
+  const delayMs = typeof retryAfterMs === 'number' && Number.isFinite(retryAfterMs) && retryAfterMs >= 0
+    ? retryAfterMs
+    : Math.min(4000, 250 * (2 ** (_input.attempt - 1)));
+
+  return { retry: true, delayMs, requiresStableIdempotencyKey };
 }
 
 export function reduceRemoteResponses(_input: Readonly<{
@@ -204,5 +224,24 @@ export function reducePermissionLifecycle(
 
 /** Week 09: see docs/CAMPUSOPS_API.md; this is not a completed solution. */
 export function selectIncidentLocation(_provider: unknown, _manualLabel: string): IncidentLocation {
-  return pending('selectIncidentLocation');
+  if (typeof _provider === 'object' && _provider !== null && !Array.isArray(_provider)) {
+    const candidate = _provider as Record<string, unknown>;
+    const { label, latitude, longitude } = candidate;
+    if (
+      typeof label === 'string'
+      && label.trim().length > 0
+      && typeof latitude === 'number'
+      && Number.isFinite(latitude)
+      && latitude >= -90
+      && latitude <= 90
+      && typeof longitude === 'number'
+      && Number.isFinite(longitude)
+      && longitude >= -180
+      && longitude <= 180
+    ) {
+      return { source: 'provider', label, latitude, longitude };
+    }
+  }
+
+  return { source: 'manual', label: _manualLabel };
 }
