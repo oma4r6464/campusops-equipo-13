@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "60b5e794a04f5eedb3a879ed21b5fcfc5b677f97",
+  "generatedAt": "2026-10-31T19:35:08.262Z",
+  "checks": [
+    {
+      "id": "location-valid",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "La prueba ejecutada acepta Zona de prueba con latitud 0 y longitud 0 como provider."
+    },
+    {
+      "id": "location-invalid-and-incomplete",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "La prueba ejecutada convierte null, 429, respuesta incompleta y latitud 91 a manual sin inventar coordenadas."
+    },
+    {
+      "id": "location-timeout",
+      "status": "pass",
+      "scenarioType": "timeout",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/week-05-client.test.ts course-tests/public/week-09.test.ts",
+      "evidence": "13 pruebas pasaron; el cliente aborta la solicitud lenta y la clasifica como timeout."
+    },
+    {
+      "id": "location-rate-limit",
+      "status": "pass",
+      "scenarioType": "429",
+      "command": "npm.cmd run backend:self-test",
+      "evidence": "El autodiagnóstico real del backend recibió 429 en geocodificación rate_limited y conservó la respuesta controlada."
+    },
+    {
+      "id": "location-disconnection",
+      "status": "blocked",
+      "scenarioType": "disconnection",
+      "command": "curl.exe -i -s -H 'Authorization: ******' -H 'X-Course-Actor: reporter-1' http://127.0.0.1:4310/v1/geocoding?q=zona",
+      "evidence": "La ejecución real fue rechazada con 401 unauthorized por el entorno al enviar la cabecera sanitizada; no se marca como pass."
+    },
+    {
+      "id": "lost-response-after-commit",
+      "status": "pass",
+      "scenarioType": "response-lost-after-commit",
+      "command": "npm.cmd run backend:self-test",
+      "evidence": "El primer cierre abortado después del commit se repitió con la misma clave close-lost-response; el backend devolvió duplicate=true, estado closed, versión 5 y un solo evento close."
+    }
+  ]
+}

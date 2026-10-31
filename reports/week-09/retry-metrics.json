@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "60b5e794a04f5eedb3a879ed21b5fcfc5b677f97",
+  "generatedAt": "2026-10-31T19:35:08.262Z",
+  "checks": [
+    {
+      "id": "retry-after-honored",
+      "status": "pass",
+      "scenarioType": "429",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "GET con 429 y retryAfterMs=800 produjo retry=true y delayMs=800."
+    },
+    {
+      "id": "finite-progressive-delays",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "Los reintentos usan demoras finitas 250, 500 y 1000 ms cuando no hay Retry-After; el intento 4 devuelve retry=false."
+    },
+    {
+      "id": "post-without-stable-key",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "POST 503 sin clave estable devolvió retry=false, delayMs=0 y requiresStableIdempotencyKey=true."
+    },
+    {
+      "id": "stable-key-prevents-duplicate",
+      "status": "pass",
+      "scenarioType": "response-lost-after-commit",
+      "command": "npm.cmd run backend:self-test",
+      "evidence": "La repetición de close-lost-response conservó la clave y contenido, devolvió duplicate=true y no duplicó el historial: 1 close."
+    },
+    {
+      "id": "observed-test-duration",
+      "status": "pass",
+      "scenarioType": "measurement",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/week-05-client.test.ts course-tests/public/week-09.test.ts",
+      "evidence": "13 pruebas pasaron en 2.297 s; el runner reportó 2.297 s y no hubo reintentos infinitos."
+    }
+  ]
+}
