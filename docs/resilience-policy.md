@@ -1,27 +1,44 @@
-# Política de resiliencia: ubicación de incidencias
+# Política de resiliencia — CampusOps (Semana 09)
 
-## Proveedor
+## Proveedor, caché y ubicación manual
 
-La integración de esta entrega usa el doble controlado del curso en `GET /v1/geocoding?q=...`, expuesto por el backend didáctico local. Sus respuestas (incluidas las coordenadas `0, 0`) son fixtures ficticios; no identifican ubicaciones reales y no se consulta ningún servicio público. La API y sus escenarios se describen en [CAMPUSOPS_API.md](./CAMPUSOPS_API.md).
+La integración usa el doble controlado del curso en `GET /v1/geocoding?q=...`, mediante un adaptador y el backend didáctico local. Las respuestas son ficticias y no se consulta un servicio público. La URL se configura con `EXPO_PUBLIC_COURSE_BACKEND_URL`.
 
-El cliente usa el mismo `EXPO_PUBLIC_COURSE_BACKEND_URL` que el resto del backend. Para Android, el emulador debe usar `http://10.0.2.2:4310`; un dispositivo físico requiere la IP autorizada en la red de laboratorio. No se debe exponer el simulador a Internet. Los actores y credenciales del curso son datos públicos de prueba, no autenticación de producción.
+El adaptador valida etiqueta no vacía, latitud finita entre -90 y 90 y longitud finita entre -180 y 180. Mantiene una caché en memoria de hasta 100 entradas durante cinco minutos, normalizando la consulta. Sólo guarda respuestas válidas; no guarda errores 429, respuestas incompletas, coordenadas inválidas, timeout ni desconexiones.
 
-El adaptador valida etiqueta y coordenadas antes de devolver una ubicación. Acepta solo etiquetas textuales no vacías, latitud finita entre -90 y 90 y longitud finita entre -180 y 180. Un cuerpo malformado, incompleto o fuera de rango se considera respuesta no disponible y no se convierte en una coordenada aproximada.
+`selectIncidentLocation` conserva una ubicación válida del proveedor. Ante respuesta nula, incompleta, inválida, timeout, 429 o desconexión, conserva el edificio, zona o referencia escrita manualmente y no inventa coordenadas.
 
-## Ejecución
+## Reintentos
 
-Al crear una incidencia, la app consulta la ubicación escrita como referencia al doble. El timeout del cliente es de 2 segundos. Una respuesta 429, un error del servidor, un timeout, una desconexión o una respuesta inválida se clasifica como no disponible; no se propagan detalles de transporte ni del proveedor a la pantalla. La entrada manual sigue habilitada y se usa sin coordenadas si la consulta falla.
+Sólo se reintentan timeout y estados transitorios 408, 429, 500, 502, 503 y 504. Los estados 400, 401, 403, 404, 409 y 422 se informan sin repetir la solicitud.
 
-Los fallos del transporte no se reintentan automáticamente para esta consulta interactiva: el fallback manual está disponible de inmediato y evita añadir espera cuando el servicio ya ha indicado que no puede responder. Los escenarios reproducibles son locales y no consumen cuotas externas. `planRetry`, usado por operaciones de sincronización, limita reintentos a los primeros tres intentos, respeta un `Retry-After` finito y no reintenta POST sin una clave de idempotencia estable.
+| Regla | Política |
+|---|---|
+| Intentos | Se reintenta después de los intentos 1, 2 y 3; desde el intento 4 no se reintenta. |
+| Backoff | 250, 500 y 1000 ms por defecto, con tope configurable de 2000 ms. |
+| Retry-After | Se respeta si es válido y no supera el tope configurable de 5000 ms; un valor inválido usa backoff. |
+| Configuración | `baseDelayMs`, `maxDelayMs` y `maxRetryAfterMs` son configurables y se validan. |
 
-## Caché
+Un POST sólo se repite con una clave de idempotencia estable de al menos ocho caracteres. Si el servidor guardó el cierre o resolución pero la respuesta se perdió, el cliente conserva la misma clave y el mismo cuerpo. El servidor devuelve el resultado ya guardado sin duplicar historial, evidencias ni notificaciones.
 
-El adaptador mantiene una caché en memoria por instancia, de máximo 100 entradas y duración de cinco minutos. La clave normaliza espacios repetidos, espacios exteriores y mayúsculas/minúsculas; la consulta HTTP conserva el texto introducido salvo espacios exteriores. Una entrada expirada se elimina al consultar.
+## Cuándo usar alternativa o informar fallo
 
-Solo se cachean respuestas HTTP exitosas que contienen etiqueta y coordenadas válidas. Respuestas incompletas, JSON inválido, coordenadas inválidas, HTTP 429, errores del servidor, timeout y desconexión nunca se guardan. La caché se pierde al reiniciar la app y no persiste consultas ni ubicaciones en almacenamiento local.
+- Geocodificación no disponible: continuar con la referencia manual, sin coordenadas inventadas.
+- GET transitorio: reintentar dentro del límite; si se agota, informar fallo sin bucle automático.
+- POST sin clave estable: enviarlo una sola vez y no repetirlo.
+- POST con respuesta perdida: reintentar sólo con la misma identidad y contenido.
+- Estado no transitorio, intento 4 o Retry-After superior al tope: informar fallo y conservar la intención pendiente cuando aplique.
 
-## Ubicación manual
+Los eventos de telemetría registran únicamente contexto técnico sanitizado: tipo, estado, intento, duración y espera. No incluyen tokens, actor, ubicación, cuerpo ni clave de idempotencia.
 
-El campo de ubicación permite escribir un edificio, una zona o una referencia. Ante una respuesta no disponible, el selector devuelve `{ source: 'manual', label }`, con el texto manual del usuario y sin `latitude` ni `longitude`. La pantalla informa que usó esa referencia y la conserva para crear la incidencia. No se sustituye por coordenadas inventadas ni por una etiqueta vacía.
+## Riesgo residual y reproducción
 
-Si la respuesta del proveedor es válida, el selector conserva la etiqueta y ambas coordenadas verificadas. La incidencia del contrato actual solo persiste la ubicación como texto; no se agregan coordenadas al DTO de incidencia.
+El backoff no usa jitter, por lo que varios clientes podrían coincidir en sus tiempos; es aceptable para el backend didáctico. Las pruebas usan dobles controlados, respuestas simuladas y datos ficticios, sin Internet público.
+
+Comando principal:
+
+```bash
+npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/week-09-retry.test.ts course-tests/public/week-09.test.ts
+```
+
+Los resultados se conservan en `reports/week-09/fault-injection.json` y `reports/week-09/retry-metrics.json`.

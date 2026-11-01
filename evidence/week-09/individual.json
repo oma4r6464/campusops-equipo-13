@@ -73,28 +73,5 @@
       "observedResult": "La suite de ubicacion valido cache normalizada, expiracion por TTL y exclusion de respuestas fallidas.",
       "explanation": "Participacion registrada para verificacion de escenarios de cache e inyeccion de fallos del proveedor de ubicacion."
     },
-    {
-      "studentId": "3523110007",
-      "commitShas": [
-        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
-      ],
-      "files": [
-        "evidence/week-09/individual.json",
-        "evidence/week-09/engineering.json",
-        "reports/week-09/fault-injection.json",
-        "reports/week-09/retry-metrics.json"
-      ],
-      "tests": [
-        "npm run typecheck",
-        "npm run lint"
-      ],
-      "reviews": [
-        "evidence/week-09/engineering.json"
-      ],
-      "prediction": "La integracion conservara las fronteras arquitectonicas, pruebas previas y esquemas de evidencia alineados al commit evaluado.",
-      "command": "npm run typecheck && npm run lint",
-      "observedResult": "TypeScript, arquitectura y linter terminaron sin errores con los artefactos de evidencia de Semana 09.",
-      "explanation": "Registro de trazabilidad y verificacion de esquemas de evidencia e integracion para el equipo-13."
-    }
   ]
 }

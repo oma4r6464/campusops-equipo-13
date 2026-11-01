@@ -9,6 +9,7 @@ import type {
 import type { IncidentLocation } from '../campusops/contracts';
 import { selectIncidentLocation as selectLocation } from '../campusops/locationValidation';
 import { parseRemoteEnvelope } from '../api/remoteResource';
+import { planRetry as planRetryWithPolicy, type RetryInput, type RetryPlan, type RetryPolicy } from '../api/retryPlan';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
 
 function pending(name: string): never {
@@ -180,36 +181,8 @@ export function deduplicateOperations<T extends Readonly<{ operationId: string }
   return result;
 }
 
-export function planRetry(_input: Readonly<{
-  method: 'GET' | 'POST';
-  status: number | 'timeout';
-  attempt: number;
-  retryAfterMs?: number;
-  idempotencyKey?: string;
-}>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  const requiresStableIdempotencyKey = _input.method === 'POST'
-    && !(_input.idempotencyKey && _input.idempotencyKey.trim().length > 0);
-  if (requiresStableIdempotencyKey) {
-    return { retry: false, delayMs: 0, requiresStableIdempotencyKey: true };
-  }
-
-  if (!Number.isInteger(_input.attempt) || _input.attempt < 1 || _input.attempt >= 4) {
-    return { retry: false, delayMs: 0, requiresStableIdempotencyKey: false };
-  }
-
-  const retryable = _input.status === 'timeout'
-    || _input.status === 408
-    || _input.status === 429
-    || (_input.status >= 500 && _input.status <= 599);
-  if (!retryable) return { retry: false, delayMs: 0, requiresStableIdempotencyKey: false };
-
-  const retryAfterIsValid = _input.retryAfterMs !== undefined
-    && Number.isFinite(_input.retryAfterMs)
-    && _input.retryAfterMs >= 0;
-  const delayMs = retryAfterIsValid
-    ? _input.retryAfterMs
-    : Math.min(8000, 250 * (2 ** (_input.attempt - 1)));
-  return { retry: true, delayMs, requiresStableIdempotencyKey: false };
+export function planRetry(input: RetryInput, policy?: Partial<RetryPolicy>): RetryPlan {
+  return planRetryWithPolicy(input, policy);
 }
 
 export function reduceRemoteResponses(_input: Readonly<{
