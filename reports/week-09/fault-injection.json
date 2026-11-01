@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "0b396d67933e8dffc9757c55ba0edea87e50a8d1",
+  "generatedAt": "2026-11-01T00:00:00-06:00",
+  "checks": [
+    {"id":"valid-provider-location","status":"pass","scenarioType":"nominal","command":"npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/public/week-09.test.ts","evidence":"El doble controlado devolvio etiqueta y coordenadas finitas dentro de rango."},
+    {"id":"invalid-location-fallback","status":"pass","scenarioType":"boundary","command":"npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/public/week-09.test.ts","evidence":"Payload incompleto, coordenadas fuera de rango y datos no numericos conservaron la referencia manual sin coordenadas."},
+    {"id":"provider-failures","status":"pass","scenarioType":"failure","command":"npm test -- --ci --runInBand course-tests/week-09-location.test.ts","evidence":"Timeout, 429 y desconexion controlados produjeron fallback manual y no se cachearon."},
+    {"id":"lost-response-after-save","status":"pass","scenarioType":"failure","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"El servidor simulado guardó la operación antes del timeout; el reintento conservó clave y cuerpo y no duplicó eventos, evidencias ni notificaciones."},
+    {"id":"sanitized-failure-telemetry","status":"pass","scenarioType":"failure","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"La telemetría conserva intento y espera sin tokens, actor, ubicación ni clave de idempotencia."}
+  ]
+}

@@ -7,7 +7,9 @@ import type {
   SyncRecord,
 } from './contracts';
 import type { IncidentLocation } from '../campusops/contracts';
+import { selectIncidentLocation as selectLocation } from '../campusops/locationValidation';
 import { parseRemoteEnvelope } from '../api/remoteResource';
+import { planRetry as planRetryWithPolicy, type RetryInput, type RetryPlan, type RetryPolicy } from '../api/retryPlan';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
 
 function pending(name: string): never {
@@ -179,14 +181,8 @@ export function deduplicateOperations<T extends Readonly<{ operationId: string }
   return result;
 }
 
-export function planRetry(_input: Readonly<{
-  method: 'GET' | 'POST';
-  status: number | 'timeout';
-  attempt: number;
-  retryAfterMs?: number;
-  idempotencyKey?: string;
-}>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  return pending('planRetry');
+export function planRetry(input: RetryInput, policy?: Partial<RetryPolicy>): RetryPlan {
+  return planRetryWithPolicy(input, policy);
 }
 
 export function reduceRemoteResponses(_input: Readonly<{
@@ -202,7 +198,7 @@ export function reducePermissionLifecycle(
   return pending('reducePermissionLifecycle');
 }
 
-/** Week 09: see docs/CAMPUSOPS_API.md; this is not a completed solution. */
-export function selectIncidentLocation(_provider: unknown, _manualLabel: string): IncidentLocation {
-  return pending('selectIncidentLocation');
+/** Week 09: uses only validated provider coordinates and otherwise preserves manual input. */
+export function selectIncidentLocation(provider: unknown, manualLabel: string): IncidentLocation {
+  return selectLocation(provider, manualLabel);
 }
