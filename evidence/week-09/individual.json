@@ -36,7 +36,7 @@
     {
       "studentId": "oma4r6464",
       "commitShas": [
-        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+        "201eae85b44bb1f58337eb58d93e01e5d17ba142"
       ],
       "files": [
         "src/course-evaluation/index.ts",
@@ -56,7 +56,8 @@
     {
       "studentId": "jesus-vegmed",
       "commitShas": [
-        "31627bbd1a4aff81302ea5d73585dea8d5a0afcb"
+        "60b5e794a04f5eedb3a879ed21b5fcfc5b677f97",
+        "3a6eeae0453bda16a8f445c300e70d8598aade2d"
       ],
       "files": [
         "src/api/courseGeocodingClient.ts",
@@ -72,6 +73,33 @@
       "command": "npm test -- --ci --runInBand course-tests/week-09-location.test.ts",
       "observedResult": "La suite de ubicacion valido cache normalizada, expiracion por TTL y exclusion de respuestas fallidas.",
       "explanation": "Participacion registrada para verificacion de escenarios de cache e inyeccion de fallos del proveedor de ubicacion."
+    },
+    {
+      "studentId": "3523110007",
+      "commitShas": [
+        "5e2e17b5f9ecca2e60c33fa5ac32c34404800b4c",
+        "58993b20baf8aca327bc61cb9e739a88636bb318"
+      ],
+      "files": [
+        "docs/resilience-policy.md",
+        "evidence/week-09/engineering.json",
+        "reports/week-09/fault-injection.json",
+        "reports/week-09/retry-metrics.json"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/week-09-retry.test.ts course-tests/public/week-09.test.ts",
+        "npm run typecheck",
+        "npm run lint",
+        "npm run architecture:check"
+      ],
+      "reviews": [
+        "docs/resilience-policy.md",
+        "evidence/week-09/engineering.json"
+      ],
+      "prediction": "La integración conservará las fronteras del proyecto, los fallbacks y los reintentos acotados, con evidencias alineadas al commit comprobado.",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/week-09-retry.test.ts course-tests/public/week-09.test.ts",
+      "observedResult": "Pasaron 3 suites y 27 pruebas; TypeScript, lint y arquitectura terminaron sin errores.",
+      "explanation": "Consolidé los cambios de ubicación y reintentos en la rama de integración, eliminé cambios ajenos de Semana 05 y alineé los reportes con la versión comprobada."
     }
   ]
 }
