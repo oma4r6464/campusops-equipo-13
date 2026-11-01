@@ -8,6 +8,7 @@ import type {
 } from './contracts';
 import type { IncidentLocation } from '../campusops/contracts';
 import { parseRemoteEnvelope } from '../api/remoteResource';
+import { planRetry as planRetryWithPolicy, type RetryInput, type RetryPlan, type RetryPolicy } from '../api/retryPlan';
 import { redactForTelemetry as redactTelemetry } from '../security/redactForTelemetry';
 
 function pending(name: string): never {
@@ -179,14 +180,8 @@ export function deduplicateOperations<T extends Readonly<{ operationId: string }
   return result;
 }
 
-export function planRetry(_input: Readonly<{
-  method: 'GET' | 'POST';
-  status: number | 'timeout';
-  attempt: number;
-  retryAfterMs?: number;
-  idempotencyKey?: string;
-}>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  return pending('planRetry');
+export function planRetry(input: RetryInput, policy?: Partial<RetryPolicy>): RetryPlan {
+  return planRetryWithPolicy(input, policy);
 }
 
 export function reduceRemoteResponses(_input: Readonly<{

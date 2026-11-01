@@ -15,6 +15,7 @@ export function createCourseIncidentGateway(
     actorId: process.env.EXPO_PUBLIC_COURSE_ACTOR || FIXTURE_ACTOR,
     accessToken: FIXTURE_CREDENTIAL,
     timeoutMs: 2000,
+        retry: {},
     ...(onTelemetry ? { onTelemetry } : {}),
   });
   return createCloudIncidentGateway(client);

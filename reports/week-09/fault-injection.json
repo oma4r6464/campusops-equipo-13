@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "44889ae3f34e8730a0a024fa6204648064d1bf6a",
+  "generatedAt": "2026-10-31T18:00:00.000Z",
+  "checks": [
+    {
+      "id": "lost-response-resolve-same-key",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "El servidor simulado guarda la resolucion y la respuesta no llega (timeout de 5 ms). El cliente reintenta con la misma Idempotency-Key y el mismo cuerpo; el servidor responde duplicate=true. Resultado: 2 solicitudes identicas, 1 evento de historial, 1 evidencia y 1 notificacion."
+    },
+    {
+      "id": "lost-response-close-same-key",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Mismo escenario con la accion close: 2 solicitudes con clave y cuerpo identicos, version final 2, 1 evento de historial, 1 notificacion y 0 evidencias adicionales."
+    },
+    {
+      "id": "rate-limited-then-recovers",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Respuesta 429 con Retry-After de 1 s seguida de una respuesta valida: el cliente espera 1000 ms una vez, hace 2 solicitudes y devuelve la lista."
+    },
+    {
+      "id": "permanent-503-bounded",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Un 503 en todas las respuestas termina en IncidentClientError kind=server status=503 tras exactamente 4 solicitudes y esperas [250, 500, 1000] ms; no hay bucle infinito."
+    },
+    {
+      "id": "post-503-without-key-single-request",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "perform con clave de idempotencia vacia y respuesta 503 envia 1 sola solicitud y falla con kind=server."
+    },
+    {
+      "id": "public-week-09-retry-scenarios",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-09.test.ts",
+      "evidence": "Las 3 pruebas publicas de planRetry pasan: POST con clave estable tras timeout reintenta, GET 429 con Retry-After 800 espera 800 ms y el intento 4 no reintenta, POST 503 sin clave devuelve requiresStableIdempotencyKey=true. Todas se ejecutan con respuestas simuladas, sin Internet publico."
+    }
+  ]
+}

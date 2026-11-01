@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "44889ae3f34e8730a0a024fa6204648064d1bf6a",
+  "generatedAt": "2026-10-31T18:00:00.000Z",
+  "checks": [
+    {
+      "id": "retry-after-honored",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts course-tests/public/week-09.test.ts",
+      "evidence": "Una respuesta 429 con Retry-After: 1 produce una espera de 1000 ms (sleep llamado una vez con 1000) y el segundo intento recupera la lista; fetch se llama 2 veces. planRetry con retryAfterMs=800 devuelve delayMs=800."
+    },
+    {
+      "id": "backoff-progressive-and-bounded",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Los intentos 1, 2 y 3 esperan [250, 500, 1000] ms, todos menores o iguales al tope de 2000 ms. Con baseDelayMs=100 y maxDelayMs=300 las esperas son [100, 200, 300]; valores NaN o negativos en la configuracion vuelven al valor por defecto."
+    },
+    {
+      "id": "attempt-4-no-further-retry",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Con 503 permanente el cliente hace exactamente 4 solicitudes y 3 esperas [250, 500, 1000]; planRetry devuelve retry=false para los intentos 4, 5 y 100, tanto con 503 como con timeout."
+    },
+    {
+      "id": "retry-after-above-cap-not-retried",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Un Retry-After de 5001 ms (tope 5000 ms) devuelve retry=false en lugar de recortar la espera; valores -1, NaN e Infinity se ignoran y se usa la espera progresiva de 250 ms."
+    },
+    {
+      "id": "post-without-stable-key-not-repeated",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts course-tests/public/week-09.test.ts",
+      "evidence": "POST con clave ausente, vacia, de espacios o de menos de 8 caracteres devuelve {retry:false, delayMs:0, requiresStableIdempotencyKey:true} con 503, 429 y timeout; en el cliente perform con clave vacia hace 1 sola solicitud."
+    },
+    {
+      "id": "non-transient-statuses-not-retried",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts",
+      "evidence": "Los estados 200, 201, 400, 401, 403, 404, 409 y 422 devuelven retry=false y delayMs=0."
+    },
+    {
+      "id": "telemetry-attempts-and-times-redacted",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand course-tests/week-09-retry.test.ts course-tests/week-05-client.test.ts",
+      "evidence": "El evento del primer fallo contiene kind=network, status=429, attempt=1 y delayMs=2000; el JSON serializado no contiene el token ni el actor. Sin la opcion retry la telemetria conserva la forma anterior {kind, status, attempt}."
+    }
+  ]
+}
