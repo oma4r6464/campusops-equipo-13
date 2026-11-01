@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 9,
-  "commitSha": "PENDING_FINAL_SHA",
+  "commitSha": "5e2e17b5f9ecca2e60c33fa5ac32c34404800b4c",
   "generatedAt": "2026-11-01T00:00:00-06:00",
   "checks": [
     {"id":"valid-provider-location","status":"pass","scenarioType":"nominal","command":"npm test -- --ci --runInBand course-tests/week-09-location.test.ts course-tests/public/week-09.test.ts","evidence":"El doble controlado devolvio etiqueta y coordenadas finitas dentro de rango."},
