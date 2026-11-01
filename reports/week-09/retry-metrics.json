@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 9,
-  "commitSha": "5e2e17b5f9ecca2e60c33fa5ac32c34404800b4c",
+  "commitSha": "58993b20baf8aca327bc61cb9e739a88636bb318",
   "generatedAt": "2026-11-01T00:00:00-06:00",
   "checks": [
     {"id":"retry-after-honored","status":"pass","scenarioType":"boundary","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"429 con Retry-After valido produjo la espera indicada y una recuperación posterior."},

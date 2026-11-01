@@ -72,6 +72,6 @@
       "command": "npm test -- --ci --runInBand course-tests/week-09-location.test.ts",
       "observedResult": "La suite de ubicacion valido cache normalizada, expiracion por TTL y exclusion de respuestas fallidas.",
       "explanation": "Participacion registrada para verificacion de escenarios de cache e inyeccion de fallos del proveedor de ubicacion."
-    },
+    }
   ]
 }
