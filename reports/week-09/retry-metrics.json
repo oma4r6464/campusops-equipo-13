@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "0b396d67933e8dffc9757c55ba0edea87e50a8d1",
+  "generatedAt": "2026-11-01T00:00:00-06:00",
+  "checks": [
+    {"id":"retry-after-honored","status":"pass","scenarioType":"boundary","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"429 con Retry-After valido produjo la espera indicada y una recuperación posterior."},
+    {"id":"bounded-progressive-backoff","status":"pass","scenarioType":"boundary","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"Las esperas observadas fueron 250, 500 y 1000 ms; el intento 4 no programa otro reintento."},
+    {"id":"post-without-key","status":"pass","scenarioType":"failure","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"POST sin clave estable se envio una sola vez y devolvio requiresStableIdempotencyKey=true."},
+    {"id":"lost-response-no-duplicate","status":"pass","scenarioType":"failure","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"La repeticion de la misma operación produjo dos solicitudes identicas pero un solo efecto en el servidor simulado."},
+    {"id":"non-transient-statuses","status":"pass","scenarioType":"boundary","command":"npm test -- --ci --runInBand course-tests/week-09-retry.test.ts","evidence":"Estados no transitorios no se reintentaron."}
+  ]
+}

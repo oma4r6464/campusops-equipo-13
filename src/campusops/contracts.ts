@@ -17,6 +17,18 @@ export type IncidentLocation = Readonly<{
   longitude?: number;
 }>;
 
+export type GeocodingUnavailableReason =
+  | 'timeout'
+  | 'rate_limited'
+  | 'network'
+  | 'server'
+  | 'invalid_response'
+  | 'http_error';
+
+export type GeocodingLookupResult =
+  | Readonly<{ kind: 'available'; value: Readonly<{ label: string; latitude: number; longitude: number }> }>
+  | Readonly<{ kind: 'unavailable'; reason: GeocodingUnavailableReason }>;
+
 export type PendingIncidentOperation = Readonly<{
   operationId: string;
   incidentId: string;

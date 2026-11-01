@@ -64,7 +64,7 @@ export function createIncidentUseCases(gateway: IncidentGateway): IncidentUseCas
         {
           category: draft.category,
           description: draft.description.trim(),
-          location: draft.location.trim(),
+          location: draft.location,
         },
         operationKey,
       );
